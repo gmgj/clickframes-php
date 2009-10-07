@@ -1,0 +1,11 @@
+clickframes/php/autoscan/application/config/routes.php
+clickframes/php/autoscan/application/controllers/${project.id}.php
+clickframes/php/autoscan/application/language/english/language.php
+clickframes/php/autoscan/application/views/${page.id}.php
+clickframes/php/autoscan/application/views/footer.php
+clickframes/php/autoscan/application/views/header.php
+clickframes/php/autoscan/application/views/navigation/${linkSet.id}.php
+clickframes/php/autoscan/css/style.css
+clickframes/php/autoscan/index.php
+clickframes/php/inputs.vm
+clickframes/php/validations.vm
