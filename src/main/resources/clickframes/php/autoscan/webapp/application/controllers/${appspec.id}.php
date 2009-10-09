@@ -10,18 +10,20 @@ class ${appspec.name} extends Controller {
         $this->${appspec.defaultPage.id}();
     }
 
-    #foreach ($page in $appspec.pages)
+#foreach ($page in $appspec.pages)
+    // ${page.title}
     function ${page.id}() {
     	include("${appspec.id}/${page.id}.php");
     }
 
-    #foreach ($form in $page.forms)
+#foreach ($form in $page.forms)
+    // ${page.title} - Form '${form.id}'
     function ${page.id}_${form.id}() {
     	include("${appspec.id}/${page.id}_${form.id}.php");
     }
-    #end
+#end
 
-    #end
+#end
 }
 
 ?>

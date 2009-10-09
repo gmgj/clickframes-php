@@ -1,8 +1,10 @@
+clickframes/php/autoscan/css/style.css
 clickframes/php/autoscan/webapp/application/config/autoload.php
 clickframes/php/autoscan/webapp/application/config/config.php
 clickframes/php/autoscan/webapp/application/config/constants.php
 clickframes/php/autoscan/webapp/application/config/database.php
 clickframes/php/autoscan/webapp/application/config/doctypes.php
+clickframes/php/autoscan/webapp/application/config/email.php
 clickframes/php/autoscan/webapp/application/config/hooks.php
 clickframes/php/autoscan/webapp/application/config/index.html
 clickframes/php/autoscan/webapp/application/config/mimes.php
@@ -12,6 +14,7 @@ clickframes/php/autoscan/webapp/application/config/user_agents.php
 clickframes/php/autoscan/webapp/application/controllers/${appspec.id}/${appspec.id}_constructor.php
 clickframes/php/autoscan/webapp/application/controllers/${appspec.id}/${page.id}.php
 clickframes/php/autoscan/webapp/application/controllers/${appspec.id}/${page.id}_${form.id}.php
+clickframes/php/autoscan/webapp/application/controllers/${appspec.id}/email_${email.id}.php
 clickframes/php/autoscan/webapp/application/controllers/${appspec.id}.php
 clickframes/php/autoscan/webapp/application/errors/error_404.php
 clickframes/php/autoscan/webapp/application/errors/error_db.php
@@ -19,6 +22,7 @@ clickframes/php/autoscan/webapp/application/errors/error_general.php
 clickframes/php/autoscan/webapp/application/errors/error_php.php
 clickframes/php/autoscan/webapp/application/errors/index.html
 clickframes/php/autoscan/webapp/application/language/english/${appspec.id}_lang.php
+clickframes/php/autoscan/webapp/application/libraries/Clickframes.php
 clickframes/php/autoscan/webapp/application/views/${page.id}.php
 clickframes/php/autoscan/webapp/application/views/footer.php
 clickframes/php/autoscan/webapp/application/views/header.php
