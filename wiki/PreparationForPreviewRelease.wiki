@@ -2,7 +2,7 @@
 
 = Required Development Tasks =
   * ~~Support multiple forms per page~~
-  * ~~Support formless actions~~
+  * Support formless actions (potential Clickframes bug)
   * ~~Split controller into multiple pieces for more fine-grained regeneration~~
   * ~~Authentication/session support~~
   * ~~E-mail support~~
