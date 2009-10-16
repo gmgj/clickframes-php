@@ -8,5 +8,6 @@ $this->load->library('form_validation');
 $this->load->library('clickframes');
 $this->form_validation->set_error_delimiters('','');
 $this->lang->load('${appspec.name.toLowerCase()}', 'english');
+$this->load->model('${appspec.id}_model');
 
 ?>

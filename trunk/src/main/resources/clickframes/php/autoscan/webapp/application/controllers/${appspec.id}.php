@@ -13,15 +13,27 @@ class ${appspec.name} extends Controller {
 #foreach ($page in $appspec.pages)
     // ${page.title}
     function ${page.id}() {
+#if ($page.actions.size() > 0 || $page.forms.size() > 0)
+    	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+#foreach ($form in $page.forms)
+    		// Form '${form.id}'
+    		if ($this->input->post('clickframesFormId') == '${page.id}-${form.id}') {
+       			include("${appspec.id}/${page.id}_form_${form.id}.php");
+       		}
+
+#end
+
+#foreach ($action in $page.actions)
+			// Action '${action.title}'
+			if ($this->input->post('clickframesFormId') == '${page.id}-action-${action.id}') {
+				include("${appspec.id}/${page.id}_action_${action.id}.php");
+			}
+#end
+    	}
+#end
+
     	include("${appspec.id}/${page.id}.php");
     }
-
-#foreach ($form in $page.forms)
-    // ${page.title} - Form '${form.id}'
-    function ${page.id}_${form.id}() {
-    	include("${appspec.id}/${page.id}_${form.id}.php");
-    }
-#end
 
 #end
 }
