@@ -1,3 +1,4 @@
+#set($dollarSign="$")
 <?php
 
 /*
@@ -12,6 +13,17 @@ $this->form_validation->set_rules('${input.id}', '${input.title}', 'trim#parse("
 ## form - execute validation
 #if ($form.inputs.size() > 0)
 if ($this->form_validation->run() == TRUE) {
+	
+## Create entities objects for all referenced entities and populate them from the form
+#foreach ($entity in $form.entities)
+	${dollarSign}${entity.id} = new ${entity.name}();
+#end
+#foreach ($input in $form.inputs)
+#if ($input.entityProperty)	
+	${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(${dollarSign}this->input->post('${input.id}'));
+#end
+#end
+	
 #end
 #foreach ($action in $form.actions)
 	// Action '${action.title}'

@@ -1,3 +1,4 @@
+#set($dollarSign="$")
 <?php
 
 class ${appspec.name} extends Controller {
@@ -11,8 +12,17 @@ class ${appspec.name} extends Controller {
     }
 
 #foreach ($page in $appspec.pages)
-    // ${page.title}
+    /**
+     *	Displays the '${page.title}' page and processes its input.
+#foreach( $param in $page.parameters )
+     *	@param string ${dollarSign}${param.id} $!{param.description}
+#end
+     */
+#if ($page.parameters.size() > 0)
+    function ${page.id}(#foreach( $param in $page.parameters )#if ($velocityCount != 1),#end ${dollarSign}${param.id} = null#end ) {
+#else
     function ${page.id}() {
+#end
 #if ($page.actions.size() > 0 || $page.forms.size() > 0)
     	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 #foreach ($form in $page.forms)
