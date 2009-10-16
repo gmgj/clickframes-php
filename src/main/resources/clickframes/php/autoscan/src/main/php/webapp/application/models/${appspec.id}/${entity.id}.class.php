@@ -7,12 +7,7 @@ class ${entity.name} {
     private ${dollarSign}${property.id};
 #end
     
-    function ${entity.name}(
-#foreach ($property in $entity.properties)
-            ${dollarSign}${property.id},
-#end
-            $clickframes
-        ) {
+    function ${entity.name}(#foreach( $property in $entity.properties )#if ($velocityCount != 1),#end ${dollarSign}${property.id}#end ) {
         
 #foreach ($property in $entity.properties)
         $this->${property.id} = ${dollarSign}${property.id};
@@ -21,7 +16,11 @@ class ${entity.name} {
     }
     
 #foreach ($property in $entity.properties)
+#if ($property.type.toUpperCase() == "BOOLEAN")
+    function is${property.name}() {
+#else
     function get${property.name}() {
+#end
         return $this->${property.id};
     }
     
