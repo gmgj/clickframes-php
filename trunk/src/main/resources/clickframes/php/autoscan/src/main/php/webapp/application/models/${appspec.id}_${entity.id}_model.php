@@ -1,17 +1,14 @@
 #set($dollarSign="$")
 <?php
 
-#foreach ($entity in $appspec.entities)
 include_once('${appspec.id}/${entity.id}.class.php');
-#end
 
-class ${appspec.name}_model extends Model{
+class ${appspec.name}_${entity.name}_model extends Model{
     
-    function ${appspec.name}_model() {
+    function ${appspec.name}_${entity.name}_model() {
         parent::Model();
     }
     
-#foreach ($entity in $appspec.entities)
     /**
      *  Persist a new ${entity.name} in the database.
      *  @param ${entity.name} ${dollarSign}${entity.id} ${entity.title}
@@ -84,9 +81,6 @@ class ${appspec.name}_model extends Model{
         // TODO: Remove ${entity.name} from data source
         return true;
     }
-    
-    
-#end
     
 }
 
