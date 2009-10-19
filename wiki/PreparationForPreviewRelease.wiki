@@ -10,7 +10,7 @@
   * Content (simple/complex)
 
 = Potential Development Tasks =
-  * Support entities (generate stub model)
+  * ~~Support entities~~ (generate stub model)
   * JavaScript or AJAX form validation
   * Break views into smaller pieces
   * Redefine form IDs for JSF compatibility
@@ -19,7 +19,7 @@
   * Plugin structure documentation
   * Plugin usage documentation
   * CodeIgniter license requirements
-  * Refine Issue Tracker appspec
+  * ~~Create new demo appspec~~
   * Publish appspec
   * Publish JARs
   * Set up demo generated application
