@@ -64,4 +64,4 @@ $smileys = array(
 
 /* End of file smileys.php */
 /* Location: ./system/application/config/smileys.php */
-?>
+/* clickframes::::clickframes */

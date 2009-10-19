@@ -3,7 +3,7 @@
 #end
 
 #macro (runtimePageLink $page $text)
-<a href="<?php echo site_url('${appspec.id}/${page.id}'); ?>">$text</a>
+<?php echo anchor('${appspec.id}/${page.id}', '${text}'); ?>
 #end
 
 <div class="content">
@@ -30,6 +30,22 @@
 		${page.description}
 	</div>
 
+#foreach ($entityList in $page.entityLists)
+	<table class="entityList">
+	<tr>
+#foreach ($property in $entityList.entity.properties)
+		<th>${property.title}</th>
+#end
+	</tr>
+	<?php foreach ($${entityList.id} as $${entityList.entity.id}) : ?>
+	<tr>
+#foreach ($property in $entityList.entity.properties)
+		<td><?php echo $${entityList.entity.id}->get${property.name}(); ?></td>
+#end
+	</tr>
+	<?php endforeach; ?>
+	</table>
+#end
 
 #foreach ($form in $page.forms)
 	<?php echo form_open('${appspec.id}/${page.id}', array('id'=>'${page.id}-${form.id}')); ?>
