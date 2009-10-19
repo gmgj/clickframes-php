@@ -41,7 +41,7 @@ class ${appspec.name}_${entity.name}_model extends Model{
     /**
      *  Retrieve an array of ${entity.name} objects.
      *  @param integer $page Which batch of results to display
-     *  @param integer $perPage Number of ${entity.name} objects to return in batch
+     *  @param integer $perPage Number of ${entity.name} objects to return in batch, 0 for all
      *  @return array
      */
     function list${entity.name}($page = 1, $perPage = 0) {

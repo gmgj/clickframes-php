@@ -34,6 +34,11 @@ $data['navigation'] .= $this->load->view('navigation/${linkSet.id.toLowerCase()}
 $data['navigation'] .= $this->load->view('navigation/${linkSet.id.toLowerCase()}', '', true);
 #end
 
+## entity lists
+#foreach ($entityList in $page.entityLists)
+$data['${entityList.id}'] = $this->${appspec.name}_${entityList.entity.name}_model->list${entityList.entity.name}();
+#end
+
 ## header view
 $this->load->view('header', $data);
 ## this view
