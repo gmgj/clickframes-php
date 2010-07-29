@@ -40,7 +40,7 @@
 |
 */
 
-$route['default_controller'] = "${appspec.id.toLowerCase()}";
+$route['default_controller'] = "${appspec.defaultPage.id.toLowerCase()}";
 $route['scaffolding_trigger'] = "";
 
 

@@ -1,17 +1,15 @@
 #set($dollarSign="$")
 #if ($input.type.toUpperCase() == "TEXT")
-<td><?php echo form_input(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
+<?php echo form_input(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
 #elseif ($input.type.toUpperCase() == "PASSWORD")
-<td><?php echo form_password(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
+<?php echo form_password(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
 #elseif ($input.type.toUpperCase() == "TEXTAREA")
-<td><?php echo form_textarea(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
+<?php echo form_textarea(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
 #elseif ($input.type.toUpperCase() == "RADIO")
-<td class="checkbox">
     #foreach($key in $input.allowedValues.keySet())
     <div class="option"><?php echo form_radio(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}'#if ($input.defaultValue == $key), 'checked'=>'checked'#end)); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
     #end
 #elseif ($input.type.toUpperCase() == "DROPDOWN")
-<td>
 <?php 
     ${dollarSign}${input.id}Options = array();
     #foreach($key in $input.allowedValues.keySet())
@@ -20,12 +18,9 @@
     echo form_dropdown('${input.id}', ${dollarSign}${input.id}Options#if ($input.defaultValue), '${input.defaultValue}'#end);
 ?>
 #elseif ($input.type.toUpperCase() == "CHECKBOX")
-<td class="checkbox">
     #foreach($key in $input.allowedValues.keySet())
     <div class="option"><?php echo form_checkbox(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}'#if ($input.defaultValue == $key), 'checked'=>'checked'#end)); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
     #end
 #else
-<td>I don't know what to do with ${input.type}.
+I don't know what to do with ${input.type}.
 #end
-<div class="message"><span id="${input.id}_message"><?php echo form_error('${input.id}'); ?></span></div>
-</td>
