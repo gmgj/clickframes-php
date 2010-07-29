@@ -3,14 +3,29 @@
     <head>
         <meta name="clickframesPage" content="<?php echo $pageId; ?>" />
         <title><?php echo $pageTitle; ?> - <?php echo $applicationTitle; ?></title>
+        
+        <link type="text/css" rel="stylesheet" href="/css/reset-fonts.css" />
+        <link type="text/css" rel="stylesheet" href="/css/grid.css" />
         <link type="text/css" rel="stylesheet" href="/css/style.css" />
     </head>
     <body>
-        <div id="application-name"><?php echo $applicationTitle; ?></div>
-        <div class="container">
-        
-            <h1><?php echo $pageTitle; ?></h1>
-            
-            <ul id="navigation">
+    
+	<div id="header">
+		<div class="container_12">
+    
+			<h1 class="grid_12"><a href="<?php echo base_url(); ?>"><?php echo $applicationTitle; ?></a></h1>
+			<div class="clear"></div>
+			<ul id="site-navigation" class="grid_8">
                 <?php echo $navigation; ?>
             </ul>
+
+			<div id="identity" class="grid_4">Logged in as ...</div>
+			<div class="clear"></div>
+		
+		</div>
+	</div>
+    
+	<div class="container_12">
+		<div class="grid_12">
+
+<?php /* clickframes::::clickframes */ ?>

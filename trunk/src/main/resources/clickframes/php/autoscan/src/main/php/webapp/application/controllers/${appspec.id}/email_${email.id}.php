@@ -31,4 +31,5 @@ if ($result !== TRUE) {
 	show_error("Unable to send email.\n\n" + $result);
 }
 
+/* clickframes::::clickframes */
 ?>

@@ -3,7 +3,7 @@
 #end
 
 #macro (runtimePageLink $page $text)
-<a href="<?php echo site_url('${appspec.id}/${page.id}'); ?>">$text</a>
+<a href="<?php echo site_url('${page.id}'); ?>">$text</a>
 #end
 
 #foreach ($link in $linkSet.links)
@@ -15,3 +15,5 @@
     #end
 </li>
 #end
+
+<!-- clickframes::::clickframes -->

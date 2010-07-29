@@ -1,9 +1,9 @@
 #set($dollarSign="$")
 <?php
 
-include_once('${appspec.id}/${entity.id}.class.php');
+include_once('${appspec.id}/${entity.name}DTO.class.php');
 
-class ${appspec.name}_${entity.name}_model extends Model{
+class ${appspec.name}_${entity.name}_model extends Model {
     
     function ${appspec.name}_${entity.name}_model() {
         parent::Model();
@@ -11,8 +11,8 @@ class ${appspec.name}_${entity.name}_model extends Model{
     
     /**
      *  Persist a new ${entity.name} in the database.
-     *  @param ${entity.name} ${dollarSign}${entity.id} ${entity.title}
-     *  @return ${entity.name} Object updated with database-generated fields, if applicable.
+     *  @param ${entity.name}DTO ${dollarSign}${entity.id} ${entity.title}
+     *  @return ${entity.name}DTO Object updated with database-generated fields, if applicable.
      */
     function create${entity.name}(${dollarSign}${entity.id}) {
         // TODO: Create ${entity.name} in data source, assigning identifier if applicable
@@ -23,10 +23,10 @@ class ${appspec.name}_${entity.name}_model extends Model{
     /**
      *  Retrieve an ${entity.name} from the database using its identifier.
      *  @param mixed ${dollarSign}id ${entity.name}'s unique identifier
-     *  @return ${entity.name}
+     *  @return ${entity.name}DTO
      */
     function read${entity.name}(${dollarSign}id) {
-        ${dollarSign}${entity.id} = new ${entity.name}();
+        ${dollarSign}${entity.id} = new ${entity.name}DTO();
 
         // TODO: Retrieve ${entity.name} from data source
 
@@ -41,7 +41,7 @@ class ${appspec.name}_${entity.name}_model extends Model{
     /**
      *  Retrieve an array of ${entity.name} objects.
      *  @param integer $page Which batch of results to display
-     *  @param integer $perPage Number of ${entity.name} objects to return in batch, 0 for all
+     *  @param integer $perPage Number of ${entity.name}DTO objects to return in batch, 0 for all
      *  @return array
      */
     function list${entity.name}($page = 1, $perPage = 0) {
@@ -51,7 +51,7 @@ class ${appspec.name}_${entity.name}_model extends Model{
     }
     
     /**
-     *  Retrieve an array of ${entity.name} objects which match the provided
+     *  Retrieve an array of ${entity.name}DTO objects which match the provided
      *  search terms.
      *  @param string $searchTerms Search terms to match
      *  @return array
@@ -64,7 +64,7 @@ class ${appspec.name}_${entity.name}_model extends Model{
     
     /**
      *  Update an existing ${entity.name} in the database. 
-     *  @param ${entity.name} ${dollarSign}${entity.id} The updated object.
+     *  @param ${entity.name}DTO ${dollarSign}${entity.id} The updated object.
      *  @return boolean Returns true if update successful.
      */
     function update${entity.name}(${dollarSign}${entity.id}) {
@@ -84,4 +84,6 @@ class ${appspec.name}_${entity.name}_model extends Model{
     
 }
 
+
+/* clickframes::::clickframes */
 ?>
