@@ -30,7 +30,19 @@
       <groupId>org.clickframes</groupId>
       <artifactId>clickframes-core</artifactId>
       <version>0.9.9-SNAPSHOT</version>
+      <exclusions>
+      	<exclusion>
+          <groupId>org.apache.velocity</groupId>
+          <artifactId>velocity</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+	<!-- velocity - overriding with newest stable version -->
+	<dependency>
+		<groupId>org.apache.velocity</groupId>
+		<artifactId>velocity</artifactId>
+		<version>1.7-beta1</version>
+	</dependency>
   </dependencies>
  
   <build>
