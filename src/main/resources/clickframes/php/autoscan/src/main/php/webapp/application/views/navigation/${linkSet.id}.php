@@ -16,4 +16,4 @@
 </li>
 #end
 
-<!-- clickframes::::clickframes -->
+<?php /* clickframes::::clickframes */ ?>

@@ -7,7 +7,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 
 #foreach ($key in $page.allOutcomes.keySet())
 #set($outcome = $page.allOutcomes.get($key))
-	const OUTCOME_${key}_${outcome.uppercaseId} = ${velocityCount};
+	const OUTCOME_${key} = ${velocityCount};
 #end
 
     /**
@@ -69,8 +69,8 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 			switch (${dollarSign}outcome) {
 #foreach ($key in $page.allOutcomes.keySet())
 #set($outcome = $page.allOutcomes.get($key))
-				case self::OUTCOME_${key}_${outcome.uppercaseId} :
-					_${outcome.id}Outcome();
+				case self::OUTCOME_${key} :
+					$this->_${outcome.id}Outcome();
 					break;
 #end
 				default:
@@ -97,7 +97,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #foreach ($action in $form.actions)
 	function _process${form.name}${action.name}($params = array()) {
 		// return the default successful outcome
-		return self::OUTCOME_${action.defaultOutcome.uppercaseId};
+		return self::OUTCOME_${action.defaultOutcome.key};
 	}
 #end
 #end
@@ -105,7 +105,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #foreach ($action in $page.actions)
 	function _process${action.name}($params = array()) {
 		// return the default successful outcome
-		return self::OUTCOME_${action.parent.id}_${action.id}_${action.defaultOutcome.uppercaseId};
+		return self::OUTCOME_${action.defaultOutcome.key};
 	}
 #end
 
@@ -149,7 +149,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #foreach ($linkset in $appspec.globalLinkSets)
 		$data['navigation'] .= $this->load->view('navigation/${linkset.id}', '', true);
 #end
-		
+
 		$data['applicationTitle']	= $this->lang->line('${appspec.id}_title');
 		$data['pageTitle']			= $this->lang->line('${appspec.id}_${page.id}_title');
 		$data['pageId']				= '${page.id}';

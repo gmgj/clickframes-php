@@ -12,6 +12,9 @@ abstract class Abstract${entity.name}DTO {
 #if ($property.persistent)
     abstract function set${property.name}(${dollarSign}${property.id});
 #end
+#if ($property.multiple)
+    abstract function add${property.name}(${dollarSign}${property.id});
+#end
     
 #end
 }

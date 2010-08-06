@@ -6,7 +6,11 @@ include_once('Abstract${entity.name}DTO.class.php');
 class ${entity.name}DTO extends Abstract${entity.name}DTO {
     
 #foreach ($property in $entity.properties)
+#if ($property.multiple)
+    private ${dollarSign}${property.id} = array();
+#else
     private ${dollarSign}${property.id};
+#end
 #end
     
 #foreach ($property in $entity.properties)
@@ -24,6 +28,13 @@ class ${entity.name}DTO extends Abstract${entity.name}DTO {
     }
 
 #end
+#if ($property.multiple)
+    function add${property.name}(${dollarSign}${property.id}) {
+        $this->${property.id}[] = ${dollarSign}${property.id};
+    }
+
+#end
+
 #end
     
 }

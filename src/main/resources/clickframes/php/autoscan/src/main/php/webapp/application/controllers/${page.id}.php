@@ -30,9 +30,9 @@ class ${page.name} extends Generated${page.name}Controller {
         // Compute the proper outcome
 #foreach ($key in $page.allOutcomes.keySet())
 #set($outcome = $page.allOutcomes.get($key))
-        // ${dollarSign}outcome = self::OUTCOME_${key}_${outcome.uppercaseId};
+        // ${dollarSign}outcome = self::OUTCOME_${key};
 #end
-        ${dollarSign}outcome = self::OUTCOME_${action.defaultOutcome.uppercaseId};
+        ${dollarSign}outcome = self::OUTCOME_${action.defaultOutcome.key};
         return ${dollarSign}outcome;
 	}
 #end
@@ -44,13 +44,28 @@ class ${page.name} extends Generated${page.name}Controller {
 
         // Compute the proper outcome
 #foreach ($outcome in $action.outcomes)
-        // ${dollarSign}outcome = self::OUTCOME_${outcome.uppercaseId};
+        // ${dollarSign}outcome = self::OUTCOME_${outcome.key};
 #end
-        ${dollarSign}outcome = self::OUTCOME_${action.defaultOutcome.uppercaseId};
+        ${dollarSign}outcome = self::OUTCOME_${action.defaultOutcome.key};
         return ${dollarSign}outcome;
 	}
 #end
+
+    function _getDisplayData($params = array()) {
+    
+        $data = parent::_getDisplayData($params);
+        
+#foreach ($output in $page.outputs)
+        $data['${output.id}'] = $this->${output.entity.name}_model->get${output.entity.name}();
+#end
+#foreach ($outputList in $page.outputLists)
+        $data['${outputList.id}'] = $this->${outputList.entity.name}_model->get${outputList.name}();
+#end
+
+        return $data;
+    }
    
 }
 
+/* clickframes::::clickframes */
 ?>
