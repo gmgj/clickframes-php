@@ -99,7 +99,7 @@
 
 ### FORMS
 #foreach ($form in $page.forms)
-	<?php echo form_open('${appspec.id}/${page.id}', array('id'=>'${page.id}-${form.id}')); ?>
+	<?php echo form_open('${page.id}', array('id'=>'${page.id}-${form.id}')); ?>
 	<?php echo form_hidden('clickframesFormId', '${page.id}-${form.id}'); ?>
 
 ### FORM INPUTS
