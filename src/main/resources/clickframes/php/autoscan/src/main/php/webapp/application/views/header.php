@@ -16,7 +16,7 @@
 			<h1 class="grid_12"><a href="<?php echo base_url(); ?>"><?php echo $applicationTitle; ?></a></h1>
 			<div class="clear"></div>
 			<ul id="site-navigation" class="grid_8">
-                <?php echo $navigation; ?>
+				<?php if (isset($navigations)) { foreach ($navigations as $navigation) { echo $navigation; } } ?>
             </ul>
 
 			<div id="identity" class="grid_4">Logged in as ...</div>

@@ -10,23 +10,23 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
         parent::Abstract${entity.name}_model();
     }
     
-#foreach ($output in $entity.referringOutputsUnique)
-    /**
-     *  ${output.description}
-     *  @return ${entity.name}DTO
-     */
-    function get${output.name}() {
-        // TODO: Implement get${output.name}
-        return null;
-    }
-#end
+###foreach ($output in $entity.referringOutputsUnique)
+##    /**
+##     *  ${output.description}
+##     *  @return ${entity.name}DTO
+##     */
+##    function get${output.name}() {
+##        // TODO: Implement get${output.name}
+##        return null;
+##    }
+###end
 
 #foreach ($outputList in $entity.referringOutputListsUnique)
     /**
      *  ${outputList.description}
      *  @return array An array of ${entity.name}DTO objects
      */
-    function get${outputList.name}() {
+    function get${outputList.name}($params = array()) {
         // TODO: Implement get${outputList.name}
         return array();
     }
