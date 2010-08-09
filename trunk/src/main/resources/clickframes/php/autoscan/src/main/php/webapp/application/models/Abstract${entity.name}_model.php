@@ -26,9 +26,9 @@ abstract class Abstract${entity.name}_model extends Model {
 #end
 #end
     
-#foreach ($output in $entity.referringOutputsUnique)
-    abstract function get${output.name}();
-#end
+##foreach ($output in $entity.referringOutputsUnique)
+##    abstract function get${output.name}();
+##end
 
 #foreach ($outputList in $entity.referringOutputListsUnique)
     abstract function get${outputList.name}();

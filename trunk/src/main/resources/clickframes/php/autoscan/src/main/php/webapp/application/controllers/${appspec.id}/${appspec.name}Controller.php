@@ -30,6 +30,14 @@ class ${appspec.name}Controller extends Controller {
 	}
 #end
 
+    function _getDisplayData() {
+        $data = array();
+        $data['pageId'] = $this->router->class;
+		$data['applicationTitle'] = $this->lang->line('${appspec.id}_title');
+		$data['message'] = $this->session->flashdata('message');
+        return $data;
+    }
+
 	function sendMessage($from, $to, $subject, ${dollarSign}template, $vars) {
 
 		$this->load->library('email');
