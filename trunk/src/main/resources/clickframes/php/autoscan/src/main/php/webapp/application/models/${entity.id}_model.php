@@ -28,7 +28,7 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
      */
     function get${outputList.name}($params = array()) {
         // TODO: Implement get${outputList.name}
-        return array();
+		return $this->list${outputList.entity.name}();
     }
 #end
     
@@ -84,7 +84,7 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
         }
         
         // Retrieve ${entity.name}s from data source
-        $this->db->get('${entity.id}');
+        $query = $this->db->get('${entity.id}');
         
         // Create and populate ${entity.name} instances
         if ($query->num_rows() > 0) {
