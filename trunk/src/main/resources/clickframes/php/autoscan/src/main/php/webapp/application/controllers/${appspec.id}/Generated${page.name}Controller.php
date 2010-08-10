@@ -23,7 +23,25 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
 
 #foreach($param in $page.parameters)
-	private $_${param.id};
+	/**
+     *  URL parameter: ${param.name}
+#if ($param.description)
+     *  ${param.description}
+#end
+#if ($param.required)
+     *  (Required)
+#end
+     */
+    protected $_${param.id};
+#end
+
+#foreach ($form in $page.forms)
+#foreach ($entity in $form.entities)
+    /**
+     *  ${entity.name} entity manipulated by ${form.name} form
+     */
+    protected $_${form.id}_${entity.id};
+#end
 #end
 
 	/**
@@ -73,7 +91,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 
 						// Action '${action.title}'
 						if ($this->input->post('action:${action.id}')) {
-							${dollarSign}outcome = $this->_process${form.name}${action.name}($params);
+							${dollarSign}outcome = $this->_process${form.name}${action.name}();
 						}
 #end						
 					}
@@ -81,7 +99,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
 #foreach ($action in $page.actions)
 				case '${page.id}-action-${action.id}' :
-					${dollarSign}outcome = $this->_process${action.name}($params);
+					${dollarSign}outcome = $this->_process${action.name}();
 					break;
 #end
 				default :
@@ -118,7 +136,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 	}
 	
 #foreach ($action in $form.actions)
-	function _process${form.name}${action.name}($params = array()) {
+	function _process${form.name}${action.name}() {
 		// return the default successful outcome
 		return self::OUTCOME_${action.defaultOutcome.key};
 	}
@@ -126,15 +144,17 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
 
 #foreach ($action in $page.actions)
-	function _process${action.name}($params = array()) {
+	function _process${action.name}() {
 		// return the default successful outcome
 		return self::OUTCOME_${action.defaultOutcome.key};
 	}
 #end
 
 ## OUTCOMES
-#foreach ($key in $page.allOutcomes.keySet())
-#set($outcome = $page.allOutcomes.get($key))
+#foreach ($form in $page.forms)
+#foreach ($action in $form.actions)
+#foreach ($outcome in $action.outcomes)
+#set ($key = $outcome.key)
 	function _${outcome.id}Outcome() {
 #if ($outcome.negative)
 		$messageClass = 'failure';
@@ -158,11 +178,24 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		}
 #end
 #if ($outcome.isInternal())
-		redirect('/${outcome.pageRef}');
+		$outgoingParam = null;
+#if ($action.type == 'CREATE' || $action.type == 'CREATE_OR_UPDATE')
+#foreach ($entityCreated in $form.entities)
+#foreach ($param in ${outcome.page.parameters})
+#if (${param.entityProperty} && ${param.entityProperty.entity.id} == ${entityCreated.id})
+		$outgoingParam = '/' . $this->_${form.id}_${entityCreated.id}->get${param.entityProperty.name}();
+#end##if
+#end##foreach
+#end##foreach
+#end##if
+		redirect('/${outcome.pageRef}' . $outgoingParam);
 #else
 		redirect('${outcome.href}');
 #end
 	}
+
+#end
+#end
 #end
 	
 	function _display($data) {
@@ -189,6 +222,8 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
 #end
 
+## TODO: what about outputs not mapped to params?
+
 ### OUTPUT LISTS
 #foreach($outputList in $page.outputLists)
 		$data['outputLists']['${outputList.id}'] = $this->_load${outputList.name}($params);
@@ -201,12 +236,14 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 	function _load${pageEntity.name}() {
         // Customize by overriding this function in the child class
 #if (${pageEntity.type} == 'PARAM_PRIMARY_KEY')
+		log_message('debug', 'ENTITY PRIMARY KEY: ' . $this->_${pageEntity.pageParameter.id});
         if (!is_null($this->_${pageEntity.pageParameter.id})) {
             return $this->${pageEntity.name}_model->read${pageEntity.name}($this->_${pageEntity.pageParameter.id});
         }
 #end
         return null;
 	}
+
 #end
 
 #foreach($outputList in $page.outputLists)

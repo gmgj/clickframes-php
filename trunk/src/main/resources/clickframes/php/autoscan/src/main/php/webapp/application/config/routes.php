@@ -44,7 +44,7 @@ $route['default_controller'] = "${appspec.defaultPage.id.toLowerCase()}";
 $route['scaffolding_trigger'] = "";
 
 #foreach ($page in $appspec.pages)
-$route['${page.id}/:any'] = '${page.id}/index/$1';
+$route['${page.id}/(:any)'] = "${page.id}/index/$1";
 #end
 
 
