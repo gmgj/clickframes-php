@@ -1,3 +1,4 @@
+#set($dollarSign="$")
 #macro (externalLink $href $text)
 <a href="$href">$text</a>
 #end
@@ -46,47 +47,51 @@
 	<?php endif; ?>
 
 ### CONTENTS
+### TODO: migrate these to message bundles
 #foreach ($content in $page.contents)
 	<div class="content">${content.text}</div>
 #end
 
 ### OUTPUTS
 #if ($page.outputs.size() > 0)
-	 <div id="outputs">
+	<div id="outputs">
 #foreach($output in $page.outputs)
+	<?php if (isset(${dollarSign}outputs['${output.id}'])) : ?>
 		<div class="output grid_5 alpha">
-		   <h3>${output.title}</h3>
-		   <table>
+			<h3>${output.title}</h3>
+			<table>
 #foreach ($entityProperty in ${output.entity.properties})
-			   <tr>
-				  <th>${entityProperty.title}</th>
-				  <td>
+				<tr>
+					<th>${entityProperty.title}</th>
+					<td>
 #if (${entityProperty.type} == 'FILE')
 						Download Link
 #else
-						<?php echo $${output.id}->${entityProperty.id}; ?>
+						<?php echo ${dollarSign}outputs['${output.id}']->get${entityProperty.id}(); ?>
 #end
-				  </td>
-			   </tr>
+					</td>
+				</tr>
 #end
-			   </table>
-			</div>
+			</table>
+		</div>
+	<?php endif; ?>
 #end ### FOREACH OUTPUT
-			<div class="clear"></div>
-		 </div>
+	<div class="clear"></div>
+	</div>
 #end ### OUTPUTS
 
 ### OUTPUT LISTS
 #foreach ($outputList in $page.outputLists)
 	<div class="output-list">
 		<h3>${outputList.title}</h3>
+		<?php if (isset(${dollarSign}outputLists['${outputList.id}']) && sizeof($outputLists['${outputList.id}']) > 0) : ?>
 		<table>
 		<tr>
 #foreach ($property in $outputList.entity.properties)
 			<th>${property.title}</th>
 #end
 		</tr>
-		<?php foreach ($${outputList.id} as $${outputList.entity.id}) : ?>
+		<?php foreach (${dollarSign}outputLists['${outputList.id}'] as $${outputList.entity.id}) : ?>
 		<tr>
 #foreach ($property in $outputList.entity.properties)
 			<td><?php echo $${outputList.entity.id}->get${property.name}(); ?></td>
@@ -94,6 +99,9 @@
 		</tr>
 		<?php endforeach; ?>
 		</table>
+		<?php else : ?>
+		<p class="notification">No items found.</p>
+		<?php endif; ?>
 	</div>
 #end
 
@@ -101,6 +109,9 @@
 #foreach ($form in $page.forms)
 	<?php echo form_open('${page.id}', array('id'=>'${page.id}-${form.id}')); ?>
 	<?php echo form_hidden('clickframesFormId', '${page.id}-${form.id}'); ?>
+#foreach ($entity in $form.entities)
+	<?php if (isset($outputs['${entity.id}'])) { echo form_hidden('${entity.id}_${entity.primaryKey.id}', $outputs['${entity.id}']->get${entity.primaryKey.name}()); } ?>
+#end
 
 ### FORM INPUTS
 #if ($form.inputs.size() > 0)

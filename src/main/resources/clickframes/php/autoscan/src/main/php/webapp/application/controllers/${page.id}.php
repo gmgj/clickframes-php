@@ -16,6 +16,7 @@ class ${page.name} extends Generated${page.name}Controller {
 	
 #foreach ($action in $form.actions)
 	function _process${form.name}${action.name}($params = array()) {
+
 #if ($form.inputs.size() > 0)
 ## Create entity objects for all referenced entities and populate them from the form
 #foreach ($entity in $form.entities)
@@ -24,6 +25,39 @@ class ${page.name} extends Generated${page.name}Controller {
 #foreach ($input in $form.inputs)
 #if ($input.entityProperty)	
         ${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(${dollarSign}this->input->post('${input.id}'));
+#end
+#end
+
+#if ($action.type == "CREATE")
+#foreach($entity in $form.entities)
+        $newId = $this->${entity.name}_model->create${entity.name}(${dollarSign}${entity.id});
+        ${dollarSign}${entity.id}->set${entity.primaryKey.name}($newId);
+        $this->_${form.id}_${entity.id} = ${dollarSign}${entity.id};
+#end
+#elseif ($action.type == "CREATE_OR_UPDATE")
+#foreach($entity in $form.entities)
+        if (strlen(${dollarSign}this->input->post('${entity.id}_${entity.primaryKey.id}')) > 0) {
+            // Set ID from hidden input
+            ${dollarSign}${entity.id}->set${entity.primaryKey.name}(${dollarSign}this->input->post('${entity.id}_${entity.primaryKey.id}'));
+            $this->${entity.name}_model->update${entity.name}(${dollarSign}${entity.id});
+        } else {
+            $newId = $this->${entity.name}_model->create${entity.name}(${dollarSign}${entity.id});
+            ${dollarSign}${entity.id}->set${entity.primaryKey.name}($newId);
+        }
+        
+        $this->_${form.id}_${entity.id} = ${dollarSign}${entity.id};
+#end
+#elseif ($action.type == "UPDATE")
+#foreach($entity in $form.entities)
+        // Set ID from hidden input
+        ${dollarSign}${entity.id}->set${entity.primaryKey.name}(${dollarSign}this->input->post('${entity.id}_${entity.primaryKey.id}'));
+        $this->${entity.name}_model->update${entity.name}(${dollarSign}${entity.id});
+        $this->_${form.id}_${entity.id} = ${dollarSign}${entity.id};
+#end
+#elseif ($action.type == "DELETE")
+#foreach($entity in $form.entities)
+        // Get ID from hidden input
+        $this->${entity.name}_model->delete${entity.name}(${dollarSign}this->input->post('${entity.primaryKey.id}'));
 #end
 #end
 
@@ -50,20 +84,6 @@ class ${page.name} extends Generated${page.name}Controller {
         return ${dollarSign}outcome;
 	}
 #end
-
-    function _getDisplayData($params = array()) {
-    
-        $data = parent::_getDisplayData($params);
-        
-#foreach ($output in $page.outputs)
-        $data['${output.id}'] = $this->${output.entity.name}_model->get${output.entity.name}();
-#end
-#foreach ($outputList in $page.outputLists)
-        $data['${outputList.id}'] = $this->${outputList.entity.name}_model->get${outputList.name}();
-#end
-
-        return $data;
-    }
    
 }
 

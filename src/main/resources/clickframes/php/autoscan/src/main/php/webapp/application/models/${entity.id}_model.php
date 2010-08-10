@@ -35,7 +35,7 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
     /**
      *  Persist a new ${entity.name} in the database.
      *  @param ${entity.name}DTO ${dollarSign}${entity.id} ${entity.title}
-     *  @return ${entity.name}DTO Object updated with database-generated fields, if applicable.
+     *  @return ${entity.primaryKey.type} Created object's new unique identifier
      */
     function create${entity.name}(${dollarSign}${entity.id}) {
         // Create ${entity.name} in data source
@@ -49,10 +49,7 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
 #end
         $this->db->insert('${entity.id}');
         
-        // Update identifier field in ${dollarSign}${entity.id}
-        ${dollarSign}${entity.id}->set${entity.primaryKey.name}($this->db->insert_id());
-        
-        return ${dollarSign}${entity.id};
+        return $this->db->insert_id();
     }
 
     /**
