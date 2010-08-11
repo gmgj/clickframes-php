@@ -3,7 +3,7 @@
 <a href="$href">$text</a>
 #end
 #macro (runtimePageLink $link)
-<a href="${link.page.id}$!{context.get($link).queryString}">$link.titleEscaped</a>
+<?php echo anchor('${link.page.id}'.$!{context.get($link).queryString}, '${link.titleEscaped}'); ?>
 #end 
 
 <h2>${page.titleEscaped}</h2>

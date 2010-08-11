@@ -91,7 +91,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 
 						// Action '${action.title}'
 						if ($this->input->post('action:${action.id}')) {
-							${dollarSign}outcome = $this->_process${form.name}${action.name}();
+							$this->_performOutcome($this->_process${form.name}${action.name}());
 						}
 #end						
 					}
@@ -106,17 +106,6 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 					show_error("Unexpected action ".$this->input->post('clickframesFormId')." on page '${page.id}'.");
 
 			}
-			
-			switch (${dollarSign}outcome) {
-#foreach ($key in $page.allOutcomes.keySet())
-#set($outcome = $page.allOutcomes.get($key))
-				case self::OUTCOME_${key} :
-					$this->_${outcome.id}Outcome();
-					break;
-#end
-				default:
-					show_error("Unexpected outcome ".${dollarSign}outcome." on page '${page.id}'.");
-			}
 		}
 #end
 
@@ -124,6 +113,21 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		$this->session->keep_flashdata('referer');
 #end
 		$this->_display($this->_getDisplayData($params));
+
+	}
+	
+	function _performOutcome(${dollarSign}outcome) {
+
+		switch (${dollarSign}outcome) {
+#foreach ($key in $page.allOutcomes.keySet())
+#set($outcome = $page.allOutcomes.get($key))
+			case self::OUTCOME_${key} :
+				$this->_${outcome.id}Outcome();
+				break;
+#end
+			default:
+				show_error("Unexpected outcome ".${dollarSign}outcome." on page '${page.id}'.");
+		}
 
 	}
 	

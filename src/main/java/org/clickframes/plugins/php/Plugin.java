@@ -205,7 +205,7 @@ public class Plugin extends ClickframesPlugin {
             StringBuilder sb = new StringBuilder();
             int count = 0;
             for (PageParameter targetParameter : targetPage.getParameters()) {
-                sb.append("/");
+                sb.append("'/'.");
                 count++;
 
                 // auto fill value if possible
@@ -216,7 +216,7 @@ public class Plugin extends ClickframesPlugin {
                     // referenced by the outputList
                     if (outputList.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                         // the output matches the expected parameter
-                    	sb.append("<?php echo $"+outputList.getEntity().getId()+"->get"+targetParameter.getEntityProperty().getName()+"(); ?>");
+                    	sb.append("$"+outputList.getEntity().getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
 
                         found = true;
                     }
@@ -229,7 +229,7 @@ public class Plugin extends ClickframesPlugin {
                         // see if there is a matching output on this page
                         if (output.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                             // the output matches the expected parameter
-                        	sb.append("<?php echo $"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"(); ?>");
+                        	sb.append("$"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
 
                             found = true;
                         }
@@ -242,7 +242,7 @@ public class Plugin extends ClickframesPlugin {
                     for (PageParameter currentParameter : page.getParameters()) {
                         if (currentParameter.getEntityProperty() != null
                                 && currentParameter.getEntityProperty().equals(targetParameter.getEntityProperty())) {
-                        	sb.append("<?php echo $params['" + currentParameter.getId() + "']; ?>");
+                        	sb.append("$params['" + currentParameter.getId() + "']");
 
                             found = true;
                         }
@@ -309,7 +309,7 @@ public class Plugin extends ClickframesPlugin {
             StringBuilder sb = new StringBuilder();
             int count = 0;
             for (PageParameter targetParameter : targetPage.getParameters()) {
-            	sb.append("/");
+            	sb.append("'/'.");
                 count++;
 
                 // auto fill value if possible
@@ -320,7 +320,7 @@ public class Plugin extends ClickframesPlugin {
                         // see if there is a matching output on this page
                         if (output.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                             // the output matches the expected parameter
-                        	sb.append("<?php echo $"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"(); ?>");
+                        	sb.append("$"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
                             found = true;
                         }
                     }
@@ -333,7 +333,7 @@ public class Plugin extends ClickframesPlugin {
                         if (currentParameter.getEntityProperty() != null
                                 && currentParameter.getEntityProperty().equals(targetParameter.getEntityProperty())) {
                         	
-                        	sb.append("<?php echo $params['" + currentParameter.getId() + "']; ?>");
+                        	sb.append("$params['" + currentParameter.getId() + "']");
 
                             found = true;
                         }
