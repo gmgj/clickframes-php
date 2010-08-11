@@ -2,10 +2,9 @@
 #macro (externalLink $href $text)
 <a href="$href">$text</a>
 #end
-
-#macro (runtimePageLink $page $text)
-<?php echo anchor('${page.id}', '${text}'); ?>
-#end
+#macro (runtimePageLink $link)
+<a href="${link.page.id}$!{context.get($link).queryString}">$link.titleEscaped</a>
+#end 
 
 <h2>${page.titleEscaped}</h2>
 <!--
@@ -30,7 +29,7 @@
 #foreach($link in $page.links)
 	<li>
 #if ($link.internal)
-		#runtimePageLink($link.page $link.title)
+		#runtimePageLink($link)
 #else
 		#externalLink($link.href $link.title)
 #end
@@ -64,10 +63,12 @@
 				<tr>
 					<th>${entityProperty.title}</th>
 					<td>
-#if (${entityProperty.type} == 'FILE')
+#if ($entityProperty.multiple)
+						<?php echo count(${dollarSign}outputs['${output.id}']->get${entityProperty.name}()); ?>
+#elseif ($entityProperty.type == 'FILE')
 						Download Link
 #else
-						<?php echo ${dollarSign}outputs['${output.id}']->get${entityProperty.id}(); ?>
+						<?php echo ${dollarSign}outputs['${output.id}']->get${entityProperty.name}(); ?>
 #end
 					</td>
 				</tr>
@@ -87,12 +88,26 @@
 		<?php if (isset(${dollarSign}outputLists['${outputList.id}']) && sizeof($outputLists['${outputList.id}']) > 0) : ?>
 		<table>
 		<tr>
+#if ($outputList.links.size() > 0 || $outputList.actions.size() > 0)
+			<th></th>
+#end
 #foreach ($property in $outputList.entity.properties)
 			<th>${property.title}</th>
 #end
 		</tr>
 		<?php foreach (${dollarSign}outputLists['${outputList.id}'] as $${outputList.entity.id}) : ?>
 		<tr>
+#if ($outputList.links.size() > 0 || $outputList.actions.size() > 0)
+			<td>
+#foreach ($link in $outputList.links)
+#if ($link.internal)
+				#runtimePageLink($link)
+#else
+				#externalLink($link.href $link.title)
+#end
+#end
+			</td>
+#end
 #foreach ($property in $outputList.entity.properties)
 			<td><?php echo $${outputList.entity.id}->get${property.name}(); ?></td>
 #end
@@ -107,7 +122,7 @@
 
 ### FORMS
 #foreach ($form in $page.forms)
-	<?php echo form_open('${page.id}', array('id'=>'${page.id}-${form.id}')); ?>
+	<?php echo form_open(uri_string(), array('id'=>'${page.id}-${form.id}')); ?>
 	<?php echo form_hidden('clickframesFormId', '${page.id}-${form.id}'); ?>
 #foreach ($entity in $form.entities)
 	<?php if (isset($outputs['${entity.id}'])) { echo form_hidden('${entity.id}_${entity.primaryKey.id}', $outputs['${entity.id}']->get${entity.primaryKey.name}()); } ?>
