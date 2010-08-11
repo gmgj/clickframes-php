@@ -58,7 +58,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
 	 */
 #if ($page.parameters.size() > 0)
-	function index(#foreach( $param in $page.parameters )#if ($velocityCount != 1),#end ${dollarSign}${param.id} = null#end ) {
+	function index(#foreach( $param in $page.parameters )#if ($velocityCount != 1),#end ${dollarSign}${param.id} = null#end) {
 #else
 	function index() {
 #end
@@ -165,8 +165,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		$this->session->set_flashdata('message', array('class' => $messageClass, 'text' => $this->lang->line('${appspec.id}_${page.id}_${key}_${outcome.id}_message')));
 #end
 #foreach ($email in $outcome.emails)
-## REIMPLEMENT THIS!		
-		include("email_${email.id}.php");
+		$this->_send${email.name}();
 #end
 #if ($outcome.loginSuccessfulOutcome)
 		// Mark session as logged in
@@ -209,6 +208,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		// Customize by overriding this function in the child class
 		$data = parent::_getDisplayData();
         
+		$data['params'] = $params;
         $data['pageTitle'] = $this->lang->line('${appspec.id}_${page.id}_title');
 		
 #foreach ($linkset in $appspec.globalLinkSets)

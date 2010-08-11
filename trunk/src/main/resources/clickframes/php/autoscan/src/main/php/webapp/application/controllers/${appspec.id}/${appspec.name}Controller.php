@@ -9,6 +9,7 @@ class ${appspec.name}Controller extends Controller {
         $this->load->helper('url');
         $this->load->library('session');
         $this->load->library('form_validation');
+		$this->load->library('${appspec.id}Email');
         $this->form_validation->set_error_delimiters('','');
         $this->lang->load('${appspec.name.toLowerCase()}', 'english');
 #foreach ($entity in $appspec.entities)
@@ -37,25 +38,6 @@ class ${appspec.name}Controller extends Controller {
 		$data['message'] = $this->session->flashdata('message');
         return $data;
     }
-
-	function sendMessage($from, $to, $subject, ${dollarSign}template, $vars) {
-
-		$this->load->library('email');
-
-		$this->email->clear(TRUE);
-
-		$this->email->from($from);
-		$this->email->to($to);
-		$this->email->subject($subject);
-		$this->email->message(str_replace(array_keys($vars), array_values($vars), ${dollarSign}template));
-
-		if (!$this->email->send()) {
-			return $this->email->print_debugger();
-		}
-
-		return TRUE;
-	}
-
 
 }
 

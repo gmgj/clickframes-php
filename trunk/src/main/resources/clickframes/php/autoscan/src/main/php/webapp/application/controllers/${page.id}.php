@@ -84,6 +84,59 @@ class ${page.name} extends Generated${page.name}Controller {
         return ${dollarSign}outcome;
 	}
 #end
+
+#foreach ($email in $page.emails)
+	function _send${email.name}() {
+		
+		// TODO: Remove once implemented
+		log_message('warn', '${page.name}->_send${email.name} called, but not yet implemented.');
+		return;
+		
+		// TODO: Set sender address
+		$from = '';
+		
+		// TODO: Set recipient(s)
+		$to = ''; // may be an individual e-mail address, comma-separated values, or array of address
+		
+#foreach ($param in $email.parameters)
+#set($found = false)
+#foreach ($form in $page.forms)
+#foreach ($entity in $form.entities)
+#if ($param.entityProperty.entity.id == $entity.id)
+#set($found = true)
+		${dollarSign}${param.id} = $this->_${form.id}_${entity.id}->get${param.entityProperty.name}();
+#end
+#end
+#if (!$found)
+		// TODO: Define param value
+		${dollarSign}${param.id} = null;
+#end
+#end
+#end
+
+#foreach ($output in $email.outputs)
+#set($found = false)
+#foreach ($form in $page.forms)
+#foreach ($entity in $form.entities)
+#if ($output.entity.id == $entity.id)
+#set($found = true)
+		${dollarSign}${output.id} = $this->_${form.id}_${entity.id};
+#end
+#end
+#if (!$found)
+		// TODO: Define output value
+		${dollarSign}${output.id} = null;
+#end
+#end
+#end
+		
+		$result = $this->${appspec.id}Email->send${email.name}($from, $to#foreach($param in $email.parameters), ${dollarSign}${param.id}#end#foreach($output in $email.outputs), ${dollarSign}${output.id}#end);
+	
+		if ($result !== TRUE) {
+			show_error("Unable to send email.\n\n" + $result);
+		}
+	}
+#end
    
 }
 

@@ -205,12 +205,7 @@ public class Plugin extends ClickframesPlugin {
             StringBuilder sb = new StringBuilder();
             int count = 0;
             for (PageParameter targetParameter : targetPage.getParameters()) {
-                if (count == 0) {
-                    sb.append("?");
-                } else {
-                    sb.append("&");
-                }
-                sb.append(targetParameter.getId() + "=");
+                sb.append("/");
                 count++;
 
                 // auto fill value if possible
@@ -221,8 +216,7 @@ public class Plugin extends ClickframesPlugin {
                     // referenced by the outputList
                     if (outputList.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                         // the output matches the expected parameter
-                        sb.append("#{" + outputList.getEntity().getId() + "."
-                                + targetParameter.getEntityProperty().getId() + "}");
+                    	sb.append("<?php echo $"+outputList.getEntity().getId()+"->get"+targetParameter.getEntityProperty().getName()+"(); ?>");
 
                         found = true;
                     }
@@ -235,8 +229,7 @@ public class Plugin extends ClickframesPlugin {
                         // see if there is a matching output on this page
                         if (output.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                             // the output matches the expected parameter
-                            sb.append("#{" + page.getId() + "Controller." + output.getId() + "."
-                                    + targetParameter.getEntityProperty().getId() + "}");
+                        	sb.append("<?php echo $"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"(); ?>");
 
                             found = true;
                         }
@@ -249,12 +242,13 @@ public class Plugin extends ClickframesPlugin {
                     for (PageParameter currentParameter : page.getParameters()) {
                         if (currentParameter.getEntityProperty() != null
                                 && currentParameter.getEntityProperty().equals(targetParameter.getEntityProperty())) {
-                            sb.append("#{" + page.getId() + "Controller." + currentParameter.getId() + "}");
+                        	sb.append("<?php echo $params['" + currentParameter.getId() + "']; ?>");
 
                             found = true;
                         }
                     }
 
+                    /*
                     // 3. if not found, search all forms on current page with
                     // semantics of update
                     if (found) {
@@ -291,6 +285,7 @@ public class Plugin extends ClickframesPlugin {
                             }
                         }
                     }
+                    */
                 }
             }
 
@@ -314,12 +309,7 @@ public class Plugin extends ClickframesPlugin {
             StringBuilder sb = new StringBuilder();
             int count = 0;
             for (PageParameter targetParameter : targetPage.getParameters()) {
-                if (count == 0) {
-                    sb.append("?");
-                } else {
-                    sb.append("&");
-                }
-                sb.append(targetParameter.getId() + "=");
+            	sb.append("/");
                 count++;
 
                 // auto fill value if possible
@@ -330,9 +320,7 @@ public class Plugin extends ClickframesPlugin {
                         // see if there is a matching output on this page
                         if (output.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                             // the output matches the expected parameter
-                            sb.append("#{" + page.getId() + "Controller." + output.getId() + "."
-                                    + targetParameter.getEntityProperty().getId() + "}");
-
+                        	sb.append("<?php echo $"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"(); ?>");
                             found = true;
                         }
                     }
@@ -344,12 +332,14 @@ public class Plugin extends ClickframesPlugin {
                     for (PageParameter currentParameter : page.getParameters()) {
                         if (currentParameter.getEntityProperty() != null
                                 && currentParameter.getEntityProperty().equals(targetParameter.getEntityProperty())) {
-                            sb.append("#{" + page.getId() + "Controller." + currentParameter.getId() + "}");
+                        	
+                        	sb.append("<?php echo $params['" + currentParameter.getId() + "']; ?>");
 
                             found = true;
                         }
                     }
-
+                    
+                    /*
                     // 3. if not found, search all forms on current page with
                     // semantics of update
                     if (found) {
@@ -387,6 +377,7 @@ public class Plugin extends ClickframesPlugin {
                             }
                         }
                     }
+                    */
                 }
             }
 
