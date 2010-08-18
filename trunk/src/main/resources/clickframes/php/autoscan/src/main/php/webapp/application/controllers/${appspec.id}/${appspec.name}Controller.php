@@ -36,8 +36,15 @@ class ${appspec.name}Controller extends Controller {
         $data['pageId'] = $this->router->class;
 		$data['applicationTitle'] = $this->lang->line('${appspec.id}_title');
 		$data['message'] = $this->session->flashdata('message');
+		$data['uriSegments'] = $this->_uriSegments();
         return $data;
     }
+	
+	function _uriSegments() {
+		$segs = $this->uri->segment_array();
+		array_shift($segs);
+		return implode('/', $segs);
+	}
 
 }
 

@@ -128,6 +128,39 @@ class ${page.name} extends Generated${page.name}Controller {
 	}
 #end
 
+#foreach ($outputList in $page.outputLists)
+#foreach ($action in $outputList.actions)
+	function _process${outputList.name}${action.name}() {
+
+#if ($action.type == "UPDATE")
+		// TODO: Change impacted ${outputList.entity.id} properties
+#foreach ($property in $outputList.entity.properties)
+#if ($property.persistent)
+		//$this->_${outputList.id}Selected->set${property.name}();
+#end
+#if ($property.multiple)
+		//$this->_${outputList.id}Selected->add${property.name}();
+#end
+#end
+        //$this->${outputList.entity.name}_model->update${outputList.entity.name}($this->_${outputList.id}Selected);
+
+#elseif ($action.type == "DELETE")
+#foreach($entity in $form.entities)
+        // Get ID from hidden input
+        $this->${outputList.entity.name}_model->delete${outputList.entity.name}($this->_${outputList.id}Selected->get${outputList.entity.primaryKey.name}());
+#end
+#end
+
+        // Compute the proper outcome
+#foreach ($outcome in $action.outcomes)
+        // ${dollarSign}outcome = self::OUTCOME_${outcome.key};
+#end
+        ${dollarSign}outcome = self::OUTCOME_${action.defaultOutcome.key};
+        return ${dollarSign}outcome;
+	}
+#end
+#end
+
 #foreach ($email in $page.emails)
 	function _send${email.name}() {
 		

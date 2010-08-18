@@ -106,6 +106,9 @@
 				#externalLink($link.href $link.title)
 #end
 #end
+#foreach ($action in $outputList.actions)
+				<?php echo anchor('${page.id}/${action.id}/' . $uriSegments . '/' . $${outputList.entity.id}->get${outputList.entity.primaryKey.name}(), '${action.title}'); ?>
+#end
 			</td>
 #end
 #foreach ($property in $outputList.entity.properties)
