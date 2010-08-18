@@ -8,6 +8,49 @@ class ${page.name} extends Generated${page.name}Controller {
     function ${page.name}() {
         parent::Generated${page.name}Controller();
     }
+
+#foreach ($form in $page.forms)
+#foreach ($entity in $form.entities)
+	/**
+	 *	Loads ${entity.name} from model, for use in ${form.name} form.
+	 *	@return void
+	 */
+    function _load${form.name}${entity.name}() {
+#set($paramFound=false)
+#foreach( $param in $page.parameters )
+#if (!$paramFound && $param.entityProperty.primaryKey && $param.entityProperty.entity.id == $entity.id)
+#set($paramFound=true)
+		if (!is_null($this->_${param.id})) {
+			$this->_${form.id}_${entity.id} = $this->${entity.name}_model->read${entity.name}($this->_${param.id});
+		}
+#end
+#end
+#if (!$paramFound)
+		// TODO: Load entity from model
+		$this->_${form.id}_${entity.id} = null;
+#end
+	}
+#end
+	
+	function _load${form.name}() {
+#foreach ($input in $form.inputs)
+#if ($input.entityProperty)		
+		$this->formvalidation->set_field(
+				'${input.id}',
+				'${input.title}',
+				(!is_null($this->_${form.id}_${input.entityProperty.entity.id}) ? $this->_${form.id}_${input.entityProperty.entity.id}->get${input.entityProperty.name}() : null)
+			);
+#else
+		$this->formvalidation->set_field(
+				'${input.id}',
+				'${input.title}',
+				null
+			);
+#end
+#end
+	}
+
+#end
     
 #foreach ($form in $page.forms)
 	function _validate${form.name}() {

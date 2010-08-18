@@ -1,10 +1,10 @@
 #set($dollarSign="$")
 #if ($input.type.toUpperCase() == "TEXT")
-<?php echo form_input(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
+<?php echo form_input(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>$this->formvalidation->set_value('${input.id}'))); ?>
 #elseif ($input.type.toUpperCase() == "PASSWORD")
-<?php echo form_password(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
+<?php echo form_password(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>$this->formvalidation->set_value('${input.id}'))); ?>
 #elseif ($input.type.toUpperCase() == "TEXTAREA")
-<?php echo form_textarea(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>set_value('${input.id}'))); ?>
+<?php echo form_textarea(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>$this->formvalidation->set_value('${input.id}'))); ?>
 #elseif ($input.type.toUpperCase() == "RADIO")
     #foreach($key in $input.allowedValues.keySet())
     <div class="option"><?php echo form_radio(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}'#if ($input.defaultValue == $key), 'checked'=>'checked'#end)); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
