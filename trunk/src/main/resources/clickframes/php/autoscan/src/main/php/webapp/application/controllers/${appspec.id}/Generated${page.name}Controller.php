@@ -62,6 +62,10 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #else
 	function index() {
 #end
+#if ($page.loginRequired)
+		$this->_checkSecurity();
+#end
+
 		$params = array();
         
 #foreach( $param in $page.parameters )
@@ -74,8 +78,11 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
 #end
 
-#if ($page.loginRequired)
-		$this->_checkSecurity();
+#foreach ($form in $page.forms)
+#foreach ($entity in $form.entities)
+		$this->_load${form.name}${entity.name}();
+#end
+		$this->_load${form.name}();
 #end
 
 #if ($page.actions.size() > 0 || $page.forms.size() > 0)
@@ -115,6 +122,15 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		$this->_display($this->_getDisplayData($params));
 
 	}
+
+#foreach ($form in $page.forms)
+#foreach ($entity in $form.entities)
+    function _load${form.name}${entity.name}() { /* do nothing by default */ }
+#end
+
+	function _load${form.name}() { /* do nothing by default */ }
+#end
+
 	
 	function _performOutcome(${dollarSign}outcome) {
 
@@ -134,9 +150,23 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #foreach ($form in $page.forms)
 	function _validate${form.name}() {
 #foreach($input in $form.inputs)
-		$this->form_validation->set_rules('${input.id}', '${input.title}', 'trim#parse("clickframes/php/validations.vm")');
+#foreach($validation in $input.validations)
+#if ($validation.type.toUpperCase() == "REQUIRED")
+		$this->formvalidation->set_rule('${input.id}', 'required', '${validation.description}');
 #end
-		return $this->form_validation->run();
+#if ($validation.type.toUppercase() == "EMAIL")
+		$this->formvalidation->set_rule('${input.id}', 'valid_email', '${validation.description}');
+#end
+#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("min"))
+		$this->formvalidation->set_rule('${input.id}', 'min_length[${validation.argAsString("min")}]', '${validation.description}');
+#end
+#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("max"))
+		$this->formvalidation->set_rule('${input.id}', 'max_length[${validation.argAsString("max")}]', '${validation.description}');
+#end
+#### cover other validation types here
+#end
+#end
+		return $this->formvalidation->run();
 	}
 	
 #foreach ($action in $form.actions)
@@ -181,17 +211,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		}
 #end
 #if ($outcome.isInternal())
-		$outgoingParam = null;
-#if ($action.type == 'CREATE' || $action.type == 'CREATE_OR_UPDATE')
-#foreach ($entityCreated in $form.entities)
-#foreach ($param in ${outcome.page.parameters})
-#if (${param.entityProperty} && ${param.entityProperty.entity.id} == ${entityCreated.id})
-		$outgoingParam = '/' . $this->_${form.id}_${entityCreated.id}->get${param.entityProperty.name}();
-#end##if
-#end##foreach
-#end##foreach
-#end##if
-		redirect('/${outcome.pageRef}' . $outgoingParam);
+		redirect('/${outcome.pageRef}'$!{context.get($outcome).queryString});
 #else
 		redirect('${outcome.href}');
 #end

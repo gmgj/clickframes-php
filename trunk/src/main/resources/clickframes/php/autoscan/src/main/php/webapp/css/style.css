@@ -142,14 +142,14 @@ h3 {
     font-size:10pt;
 }
 
-#page-content form .field-message span span {
-    display:block;
+#page-content form .field-message span {
+	display:block;
     padding:3pt 6pt;
     margin-bottom:0.4em;
 }
 
 #page-content form .field-message span.error {
-    background:#ffcccc;
+	background:#ffcccc;
     border-left:3px solid #990000;
 }
 

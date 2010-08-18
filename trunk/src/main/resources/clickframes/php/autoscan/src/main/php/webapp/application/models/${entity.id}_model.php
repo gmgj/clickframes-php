@@ -105,7 +105,8 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
      *  @return boolean True if update successful.
      */
     function update${entity.name}(${dollarSign}${entity.id}) {
-        // TODO: Update ${entity.name} in data source
+		$this->db->where('${entity.primaryKey.id}', ${dollarSign}${entity.id}->getPrimaryKey());
+		$this->db->update('${entity.id}', ${dollarSign}${entity.id}->toArray());
         return true;
     }
     

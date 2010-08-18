@@ -3,7 +3,7 @@
 <a href="$href">$text</a>
 #end
 #macro (runtimePageLink $link)
-<?php echo anchor('${link.page.id}'.$!{context.get($link).queryString}, '${link.titleEscaped}'); ?>
+<?php echo anchor('${link.page.id}'$!{context.get($link).queryString}, '${link.titleEscaped}'); ?>
 #end 
 
 <h2>${page.titleEscaped}</h2>
@@ -122,7 +122,7 @@
 
 ### FORMS
 #foreach ($form in $page.forms)
-	<?php echo form_open(uri_string(), array('id'=>'${page.id}-${form.id}')); ?>
+	<?php echo form_open(uri_string(), array('id'=>'${page.id}-${form.id}', 'class'=>'validate')); ?>
 	<?php echo form_hidden('clickframesFormId', '${page.id}-${form.id}'); ?>
 #foreach ($entity in $form.entities)
 	<?php if (isset($outputs['${entity.id}'])) { echo form_hidden('${entity.id}_${entity.primaryKey.id}', $outputs['${entity.id}']->get${entity.primaryKey.name}()); } ?>
@@ -137,7 +137,7 @@
 #parse("clickframes/php/inputs.vm")
 			 </div>
 			 <div class="field-message grid_4 omega">
-				 <div class="message"><span id="${input.id}_message"><?php echo form_error('${input.id}'); ?></span></div>
+				 <div id="${input.id}_message"><?php echo $this->formvalidation->error('${input.id}'); ?></div>
 			 </div>
 			 <div class="clear"></div>
 		 </div>
@@ -153,7 +153,8 @@
 		<div class="clear"></div>
 
 	<?php echo form_close(); ?>
-
+	<script type="text/javascript" src="<?php echo base_url(); ?>js/forms/${page.id}_${form.id}.js"></script>
+	
 #end
 
 <?php /* clickframes::::clickframes */ ?>

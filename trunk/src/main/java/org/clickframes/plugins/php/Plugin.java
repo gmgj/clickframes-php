@@ -205,7 +205,7 @@ public class Plugin extends ClickframesPlugin {
             StringBuilder sb = new StringBuilder();
             int count = 0;
             for (PageParameter targetParameter : targetPage.getParameters()) {
-                sb.append("'/'.");
+                sb.append(".'/'");
                 count++;
 
                 // auto fill value if possible
@@ -216,9 +216,10 @@ public class Plugin extends ClickframesPlugin {
                     // referenced by the outputList
                     if (outputList.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                         // the output matches the expected parameter
-                    	sb.append("$"+outputList.getEntity().getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
+                    	sb.append(".$"+outputList.getEntity().getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
 
                         found = true;
+                        continue;
                     }
 
                     // 1. search all outputs on current page
@@ -229,9 +230,10 @@ public class Plugin extends ClickframesPlugin {
                         // see if there is a matching output on this page
                         if (output.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                             // the output matches the expected parameter
-                        	sb.append("$"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
+                        	sb.append(".$outputs['"+output.getId()+"']->get"+targetParameter.getEntityProperty().getName()+"()");
 
                             found = true;
+                            continue;
                         }
                     }
 
@@ -242,13 +244,13 @@ public class Plugin extends ClickframesPlugin {
                     for (PageParameter currentParameter : page.getParameters()) {
                         if (currentParameter.getEntityProperty() != null
                                 && currentParameter.getEntityProperty().equals(targetParameter.getEntityProperty())) {
-                        	sb.append("$params['" + currentParameter.getId() + "']");
+                        	sb.append(".$params['" + currentParameter.getId() + "']");
 
                             found = true;
+                            continue;
                         }
                     }
 
-                    /*
                     // 3. if not found, search all forms on current page with
                     // semantics of update
                     if (found) {
@@ -268,24 +270,22 @@ public class Plugin extends ClickframesPlugin {
                         }
 
                         for (Entity formEntity : form.getEntities()) {
-                            // see if there is a matching form entity on this
-                            // page
+                            // see if there is a matching form entity on this page
                             if (formEntity.getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
-                                // the form entity matches the expected
-                                // parameter, good!
+                                // the form entity matches the expected parameter, good!
 
-                                // now find the input which matches the entity
-                                // property
+                                // now find the input which matches the entity property
                                 SingleUserInput matchingInput = form.getInputFor(targetParameter.getEntityProperty());
 
-                                sb.append("#{" + page.getId() + "Controller." + form.getId() + matchingInput.getName()
-                                        + "}");
+                                sb.append(". $this->_" + form.getId() + "_" + 
+                                		matchingInput.getEntityProperty().getEntity().getId() + 
+                                		"->get" + matchingInput.getEntityProperty().getName() + "()");
 
                                 found = true;
+                                continue;
                             }
                         }
                     }
-                    */
                 }
             }
 
@@ -309,7 +309,7 @@ public class Plugin extends ClickframesPlugin {
             StringBuilder sb = new StringBuilder();
             int count = 0;
             for (PageParameter targetParameter : targetPage.getParameters()) {
-            	sb.append("'/'.");
+            	sb.append(".'/'");
                 count++;
 
                 // auto fill value if possible
@@ -320,8 +320,9 @@ public class Plugin extends ClickframesPlugin {
                         // see if there is a matching output on this page
                         if (output.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
                             // the output matches the expected parameter
-                        	sb.append("$"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
+                        	sb.append(".$outputs['"+output.getId()+"']->get"+targetParameter.getEntityProperty().getName()+"()");
                             found = true;
+                            continue;
                         }
                     }
 
@@ -333,13 +334,13 @@ public class Plugin extends ClickframesPlugin {
                         if (currentParameter.getEntityProperty() != null
                                 && currentParameter.getEntityProperty().equals(targetParameter.getEntityProperty())) {
                         	
-                        	sb.append("$params['" + currentParameter.getId() + "']");
+                        	sb.append(".$params['" + currentParameter.getId() + "']");
 
                             found = true;
+                            continue;
                         }
                     }
                     
-                    /*
                     // 3. if not found, search all forms on current page with
                     // semantics of update
                     if (found) {
@@ -370,20 +371,101 @@ public class Plugin extends ClickframesPlugin {
                                 // property
                                 SingleUserInput matchingInput = form.getInputFor(targetParameter.getEntityProperty());
 
-                                sb.append("#{" + page.getId() + "Controller." + form.getId() + matchingInput.getName()
-                                        + "}");
-
+                                sb.append(". $this->_" + form.getId() + "_" + 
+                                		matchingInput.getEntityProperty().getEntity().getId() + 
+                                		"->get" + matchingInput.getEntityProperty().getName() + "()");
+                                
                                 found = true;
+                                continue;
                             }
                         }
                     }
-                    */
                 }
             }
 
             pageLinkContext.put("queryString", sb.toString());
         }
     }
+    
+    public void outcomeContext(Context outcomeContext, Link outcome) {
+        // null, or a query string starting with "?" for example "?id=foo"
+    	
+    	Page page = (Page) outcomeContext.get("page");
+    	Action action = (Action) outcomeContext.get("action");
+    	Form form = (Form) outcomeContext.get("form");
+
+    	logger.info("Processing context for outcome " + outcome.getId());
+    	
+        // only for internal links
+        if (outcome.isInternal()) {
+            InternalLink internalLink = (InternalLink) outcome;
+            Page targetPage = internalLink.getPage();
+
+            StringBuilder sb = new StringBuilder();
+            int count = 0;
+            for (PageParameter targetParameter : targetPage.getParameters()) {
+            	sb.append(".'/'");
+                count++;
+
+                // auto fill value if possible
+                if (targetParameter.getEntityProperty() != null) {
+                    boolean found = false;
+                    
+                    if (form != null) {
+	                    // 1. check current form for created or updated entity
+	                    if (action.getType() == ActionType.CREATE || action.getType() == ActionType.CREATE_OR_UPDATE || action.getType() == ActionType.UPDATE) {
+	                    	
+	                    	for (Entity formEntity : form.getEntities()) {
+	                            // see if there is a matching form entity on this page
+	                            if (formEntity.getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
+	                                // the form entity matches the expected parameter, good!
+	
+	                                sb.append(". $this->_" + form.getId() + "_" + 
+	                                		targetParameter.getEntityProperty().getEntity().getId() + 
+	                                		"->get" + targetParameter.getEntityProperty().getName() + "()");
+	                                
+	                                found = true;
+	                                continue;
+
+	                            }
+	                    	}
+	                    }
+                    }
+                    
+                    // 2. check all parameters on this page
+                    if (found) {
+                        continue;
+                    }
+                    for (PageParameter currentParameter : page.getParameters()) {
+                        if (currentParameter.getEntityProperty() != null
+                                && currentParameter.getEntityProperty().equals(targetParameter.getEntityProperty())) {
+                        	sb.append(".$this->_" + currentParameter.getId());
+
+                            found = true;
+                            continue;
+                        }
+                    }
+                    
+                    // 3. check all outputs on this page
+                    if (found) {
+                        continue;
+                    }
+                    for (Output output : page.getOutputs()) {
+                        // see if there is a matching output on this page
+                        if (output.getEntity().getId().equals(targetParameter.getEntityProperty().getEntity().getId())) {
+                            // the output matches the expected parameter
+                        	sb.append(".$"+output.getId()+"->get"+targetParameter.getEntityProperty().getName()+"()");
+                            found = true;
+                            continue;
+                        }
+                    }
+                }
+            }
+            
+            outcomeContext.put("queryString", sb.toString());
+        }
+    }
+
 
     /**
      * Puts the following variables:
