@@ -33,6 +33,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
      */
     protected $_${param.id};
+
 #end
 
 #foreach ($form in $page.forms)
@@ -41,7 +42,21 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
      *  ${entity.name} entity manipulated by ${form.name} form
      */
     protected $_${form.id}_${entity.id};
+
 #end
+#end
+
+#foreach ($outputList in $page.outputLists)
+	/**
+	 *	Primary key of ${outputList.entity.name} selected for action in '${outputList.title}'
+	 */
+	protected $_${outputList.id}SelectedId;
+
+	/**
+	 *	Selected object of type ${outputList.entity.name} for action in '${outputList.title}'
+	 */
+	protected $_${outputList.id}Selected;
+
 #end
 
 	/**
@@ -122,6 +137,35 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		$this->_display($this->_getDisplayData($params));
 
 	}
+	
+#foreach ($outputList in $page.outputLists)
+#foreach ($action in $outputList.actions)
+#if ($page.parameters.size() > 0)
+	function ${action.id}(#foreach( $param in $page.parameters )${dollarSign}${param.id} = null,#end $${outputList.id}Selected) {
+#else
+	function ${action.id}($${outputList.id}Selected) {
+#end
+		$params = array();
+
+		// check parameters
+#foreach( $param in $page.parameters )
+        $params['${param.id}'] = ${dollarSign}${param.id};
+		$this->_${param.id} = ${dollarSign}${param.id};
+#if ($param.required)
+        if (is_null(${dollarSign}${param.id})) {
+            show_error('Required parameter `${param.id}` not provided.');
+        }
+#end
+#end
+		$this->_${outputList.id}SelectedId = $${outputList.id}Selected;
+		$this->_${outputList.id}Selected = $this->${outputList.entity.name}_model->get${outputList.name}($params);
+		
+		// perform action
+		$this->_performOutcome($this->_process${outputList.name}${action.name}());
+	}
+
+#end
+#end
 
 #foreach ($form in $page.forms)
 #foreach ($entity in $form.entities)
@@ -174,6 +218,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		// return the default successful outcome
 		return self::OUTCOME_${action.defaultOutcome.key};
 	}
+
 #end
 #end
 
@@ -182,40 +227,35 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		// return the default successful outcome
 		return self::OUTCOME_${action.defaultOutcome.key};
 	}
+
+#end
+
+#foreach ($outputList in $page.outputLists)
+#foreach ($action in $outputList.actions)
+	function _process${outputList.name}${action.name}() {
+		// return the default successful outcome
+		return self::OUTCOME_${action.defaultOutcome.key};
+	}
+
+#end
 #end
 
 ## OUTCOMES
 #foreach ($form in $page.forms)
 #foreach ($action in $form.actions)
 #foreach ($outcome in $action.outcomes)
-#set ($key = $outcome.key)
-	function _${outcome.id}Outcome() {
-#if ($outcome.negative)
-		$messageClass = 'failure';
-#else
-		$messageClass = 'success';
+#parse("clickframes/php/outcome.vm")
+
+
 #end
-#if ($outcome.message)
-		$this->session->set_flashdata('message', array('class' => $messageClass, 'text' => $this->lang->line('${appspec.id}_${page.id}_${key}_${outcome.id}_message')));
 #end
-#foreach ($email in $outcome.emails)
-		$this->_send${email.name}();
 #end
-#if ($outcome.loginSuccessfulOutcome)
-		// Mark session as logged in
-		$this->session->set_userdata('username', $this->input->post('${form.loginUsernameInput.id}'));
-		// Redirect user to secure page he was trying to access, if applicable
-		$referer = $this->session->flashdata('referer');
-		if (!empty($referer)) {
-			redirect($referer);
-		}
-#end
-#if ($outcome.isInternal())
-		redirect('/${outcome.pageRef}'$!{context.get($outcome).queryString});
-#else
-		redirect('${outcome.href}');
-#end
-	}
+
+#foreach ($outputList in $page.outputLists)
+#foreach ($action in $outputList.actions)
+#foreach ($outcome in $action.outcomes)
+#parse("clickframes/php/outcome.vm")
+
 
 #end
 #end
@@ -275,6 +315,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 		// Customize by overriding this function in the child class
 		return $this->${outputList.entity.name}_model->get${outputList.name}($params);
 	}
+
 #end
 
 }
