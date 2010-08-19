@@ -12,8 +12,6 @@
 		$this->_send${email.name}();
 #end
 #if ($outcome.loginSuccessfulOutcome)
-		// Mark session as logged in
-		$this->session->set_userdata('username', $this->input->post('${form.loginUsernameInput.id}'));
 		// Redirect user to secure page he was trying to access, if applicable
 		$referer = $this->session->flashdata('referer');
 		if (!empty($referer)) {

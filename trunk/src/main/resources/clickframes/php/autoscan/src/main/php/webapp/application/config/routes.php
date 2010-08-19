@@ -49,6 +49,9 @@ $route['scaffolding_trigger'] = "";
 $route['${page.id}/${action.id}/(:any)'] = "${page.id}/${action.id}/$1";
 #end
 #end
+#if ($page.loginPage)
+$route['${page.id}/logout'] = "${page.id}/logout";
+#end
 $route['${page.id}/(:any)'] = "${page.id}/index/$1";
 #end
 

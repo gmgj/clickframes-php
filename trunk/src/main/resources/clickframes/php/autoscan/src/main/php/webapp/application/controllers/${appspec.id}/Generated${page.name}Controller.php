@@ -108,7 +108,11 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 				case '${page.id}-${form.id}' :
 
 					// Form '${form.id}'
+#if ($form.inputs.size() > 0)
 					if ($this->_validate${form.name}()) {
+#else
+					if (true) {
+#end
 #foreach ($action in $form.actions)
 
 						// Action '${action.title}'
@@ -165,6 +169,14 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 	}
 
 #end
+#end
+
+### Special case to create 
+#if ($page.loginPage)
+	function logout() {
+		$this->${appspec.loginEntity.name}_model->logout();
+		redirect('/${page.id}');
+	}
 #end
 
 #foreach ($form in $page.forms)

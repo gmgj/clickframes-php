@@ -35,7 +35,13 @@
 				<?php if (isset($navigations)) { foreach ($navigations as $navigation) { echo $navigation; } } ?>
             </ul>
 
-			<div id="identity" class="grid_4">Logged in as ...</div>
+			<div id="identity" class="grid_4">
+				<?php if ($this->session->userdata('username') !== FALSE) : ?>
+				Logged in as <strong><?php echo $this->session->userdata('username'); ?></strong> &middot; <?php echo anchor('${appspec.loginPage.id}/logout', 'Log out'); ?>
+				<?php else : ?>
+				<?php echo anchor('${appspec.loginPage.id}', 'Log in'); ?>
+				<?php endif; ?>
+			</div>
 			<div class="clear"></div>
 		
 		</div>

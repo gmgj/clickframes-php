@@ -6,6 +6,11 @@ abstract class Abstract${entity.name}_model extends Model {
     function Abstract${entity.name}_model() {
         parent::Model();
     }
+	
+#if ($entity.loginEntity)
+	abstract function login(${dollarSign}${entity.id});
+	abstract function logout();
+#end
     
     abstract function create${entity.name}(${dollarSign}${entity.id});
     abstract function read${entity.name}(${dollarSign}${entity.primaryKey.id});
