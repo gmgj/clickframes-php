@@ -15,6 +15,24 @@ abstract class Abstract${entity.name}DTO {
 #if ($property.multiple)
     abstract function add${property.name}(${dollarSign}${property.id});
 #end
+#if ($property.loginPassword)
+
+	/**
+	 *	Convenience function for accessing password field.
+	 */
+	function getLoginPassword() {
+		return $this->get${property.name}();
+	}
+#end
+#if ($property.loginUsername)
+
+	/**
+	 *	Convenience function for accessing username field.
+	 */
+	function getLoginUsername() {
+		return $this->get${property.name}();
+	}
+#end
     
 #end
 

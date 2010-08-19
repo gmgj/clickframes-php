@@ -24,7 +24,12 @@ class ${entity.name}DTO extends Abstract${entity.name}DTO {
 
 #if ($property.persistent)
     function set${property.name}(${dollarSign}${property.id}) {
+#if ($property.loginPassword)
+        // Hash the password, don't store it in plaintext
+		$this->${property.id} = sha1(${dollarSign}${property.id});
+#else
         $this->${property.id} = ${dollarSign}${property.id};
+#end
     }
 
 #end

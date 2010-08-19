@@ -21,6 +21,54 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
 ##    }
 ###end
 
+#if ($entity.loginEntity)
+	/**
+	 *	Checks user's credentials against database. If valid, creates
+	 *	an authenticated session.
+	 *	@param ${entity.name}DTO User to authenticate.
+	 *	@return boolean True if login successful.
+	 */
+	function login(${dollarSign}${entity.id}) {
+		
+		log_message('info', 'Attempting to log in user `' . ${dollarSign}${entity.id}->getLoginUsername() . '`...');
+		
+        // Retrieve ${entity.name} from data source
+        $query = $this->db->get_where('${entity.id}',
+			array(
+				'${appspec.loginUsernameEntityProperty.id}' => ${dollarSign}${entity.id}->getLoginUsername(),
+				'${appspec.loginPasswordEntityProperty.id}' => ${dollarSign}${entity.id}->getLoginPassword()
+			));
+
+        if ($query->num_rows() > 0) {
+			
+			log_message('info', 'Successfully authenticated user `' . ${dollarSign}${entity.id}->getLoginUsername() . '`...');
+			
+			$row = $query->row();
+            $loggedIn = $this->mapRowTo${entity.name}($row);
+			
+            // create session
+			$this->session->set_userdata('username', ${dollarSign}${entity.id}->getLoginUsername());
+			$this->session->set_userdata('last_activity', time());
+			// load additional data into session here if desired
+			return true;
+        }
+		
+		log_message('info', 'Authentication failed for user `' . ${dollarSign}${entity.id}->getLoginUsername() . '`...');
+        
+        // Item not found
+        return false;
+	}
+	
+	/**
+	 *	Destroys user's session.
+	 *	@return void
+	 */
+	function logout() {
+		log_message('info', 'Logging out, destroying session...');
+		$this->session->sess_destroy();
+	}
+#end
+
 #foreach ($outputList in $entity.referringOutputListsUnique)
     /**
      *  ${outputList.description}

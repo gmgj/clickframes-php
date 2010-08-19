@@ -70,6 +70,16 @@ class ${page.name} extends Generated${page.name}Controller {
         ${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(${dollarSign}this->input->post('${input.id}'));
 #end
 #end
+#end
+
+#if ($action.type == 'LOGIN')
+		$success = $this->${appspec.loginEntity.name}_model->login(${dollarSign}${appspec.loginEntity.id});
+		if ($success) {
+			return self::OUTCOME_${action.loginSuccessfulOutcome.key};
+		} else {
+			return self::OUTCOME_${action.loginFailedOutcome.key};
+		}
+#else
 
 #if ($action.type == "CREATE")
 #foreach($entity in $form.entities)
@@ -111,22 +121,11 @@ class ${page.name} extends Generated${page.name}Controller {
 #end
         ${dollarSign}outcome = self::OUTCOME_${action.defaultOutcome.key};
         return ${dollarSign}outcome;
-	}
-#end
-#end
-#end
+#end##if action.type == login
 
-#foreach ($action in $page.actions)
-	function _process${action.name}($params = array()) {
-
-        // Compute the proper outcome
-#foreach ($outcome in $action.outcomes)
-        // ${dollarSign}outcome = self::OUTCOME_${outcome.key};
-#end
-        ${dollarSign}outcome = self::OUTCOME_${action.defaultOutcome.key};
-        return ${dollarSign}outcome;
 	}
-#end
+#end##foreach action
+#end##foreach form
 
 #foreach ($outputList in $page.outputLists)
 #foreach ($action in $outputList.actions)

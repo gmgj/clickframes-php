@@ -13,19 +13,8 @@
 
 ### NAVIGATION
 <div id="page-navigation" class="grid_2 alpha">
-#if ($page.links.size() > 0)
+#if ($page.links.size() > 0 || $page.linkSets.size() > 0)
 <ul>
-#foreach($linkSet in $page.linkSets)      
-#foreach($link in $linkSet.links)
-	<li>
-#if ($link.internal)
-		#runtimePageLink($link)
-#else
-		#externalLink($link.href $link.title)
-#end
-	</li>
-#end
-#end
 #foreach($link in $page.links)
 	<li>
 #if ($link.internal)
@@ -34,6 +23,9 @@
 		#externalLink($link.href $link.title)
 #end
 	</li>
+#end
+#foreach($linkSetId in $page.linkSetIds)
+<?php include('navigation/${linkSetId}.php'); ?>
 #end
 </ul>
 #end
