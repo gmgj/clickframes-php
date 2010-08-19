@@ -46,9 +46,12 @@
 	<?php endif; ?>
 
 ### CONTENTS
-### TODO: migrate these to message bundles
 #foreach ($content in $page.contents)
-	<div class="content">${content.text}</div>
+#if ($content.verbatim)
+	<div class="content verbatim" id="content_${content.id}"><?php echo $this->lang->line('${appspec.id}_${page.id}_${content.id}'); ?></div>
+#else
+	<div class="content nonverbatim" id="content_${content.id}"><?php include('content/${page.id}_${content.id}.php'); ?></div>
+#end
 #end
 
 ### OUTPUTS
