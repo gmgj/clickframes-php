@@ -7,7 +7,7 @@
 <?php echo form_textarea(array('name'=>'${input.id}', 'id'=>'${input.id}', 'value'=>$this->formvalidation->set_value('${input.id}'))); ?>
 #elseif ($input.type.toUpperCase() == "RADIO")
     #foreach($key in $input.allowedValues.keySet())
-    <div class="option"><?php echo form_radio(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}'#if ($input.defaultValue == $key), 'checked'=>'checked'#end)); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
+    <div class="option"><?php echo form_radio(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}', 'checked'=>($this->formvalidation->set_value('${input.id}') == '${key}'))); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
     #end
 #elseif ($input.type.toUpperCase() == "DROPDOWN")
 <?php 
@@ -15,11 +15,11 @@
     #foreach($key in $input.allowedValues.keySet())
         ${dollarSign}${input.id}Options['${key}'] = '${input.allowedValues.get($key)}';
     #end
-    echo form_dropdown('${input.id}', ${dollarSign}${input.id}Options#if ($input.defaultValue), '${input.defaultValue}'#end);
+    echo form_dropdown('${input.id}', ${dollarSign}${input.id}Options, $this->formvalidation->set_value('${input.id}'));
 ?>
 #elseif ($input.type.toUpperCase() == "CHECKBOX")
     #foreach($key in $input.allowedValues.keySet())
-    <div class="option"><?php echo form_checkbox(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}'#if ($input.defaultValue == $key), 'checked'=>'checked'#end)); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
+    <div class="option"><?php echo form_checkbox(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}')); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
     #end
 #else
 I don't know what to do with ${input.type}.
