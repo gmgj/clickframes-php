@@ -6,7 +6,7 @@
 		$messageClass = 'success';
 #end
 #if ($outcome.message)
-		$this->session->set_flashdata('message', array('class' => $messageClass, 'text' => $this->lang->line('${appspec.id}_${page.id}_${key}_${outcome.id}_message')));
+		$this->session->set_flashdata('message', array('class' => $messageClass, 'text' => $this->lang->line('${appspec.id}_${key}_message')));
 #end
 #foreach ($email in $outcome.emails)
 		$this->_send${email.name}();
