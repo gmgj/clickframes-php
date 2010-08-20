@@ -69,8 +69,11 @@ class ${page.name} extends Generated${page.name}Controller {
 #if ($input.entityProperty)
 #if ($input.entityProperty.type == 'FILE')
 		$this->upload->do_upload('${input.id}');
-		log_message('debug', 'UPLOAD DATA: ' . print_r($this->upload->data(), true));
-		${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(BinaryDTO::withData($this->upload->data()));
+		if ($this->upload->display_errors() == '') {
+			${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(BinaryDTO::withData($this->upload->data()));
+		} else {
+			log_message('error', 'Error uploading file: ' . $this->upload->display_errors('', ''));
+		}
 #else
         ${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(${dollarSign}this->input->post('${input.id}'));
 #end

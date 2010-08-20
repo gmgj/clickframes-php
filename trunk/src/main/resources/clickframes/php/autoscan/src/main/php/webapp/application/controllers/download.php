@@ -44,7 +44,13 @@ class Download extends ${appspec.name}Controller {
 			show_error('BinaryDTO is null in ${entity.name} for id `'.${dollarSign}${entity.primaryKey.id}.'`.', 500);
 		}
 	
-		force_download($binary->getFilename(), file_get_contents($binary->getPath()));
+        $file = @file_get_contents($binary->getPath());
+    
+        if (is_null($file) || $file == '') {
+            show_error('File empty, or could not retrieve from disk, for ID `'.$id.'`.', 500);
+        }
+        
+		force_download($binary->getFilename(), $file);
 	}
 #end##foreach property
 #end##foreach entity
