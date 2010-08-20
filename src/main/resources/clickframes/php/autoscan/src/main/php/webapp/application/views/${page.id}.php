@@ -61,7 +61,11 @@
 #if ($entityProperty.multiple)
 						<?php echo count(${dollarSign}outputs['${output.id}']->get${entityProperty.name}()); ?>
 #elseif ($entityProperty.type == 'FILE')
-						Download Link
+						<?php
+							if (!is_null(${dollarSign}outputs['${output.id}']->get${entityProperty.name}())) {
+								echo anchor('download/${output.entity.id}${entityProperty.name}/' . ${dollarSign}outputs['${output.id}']->get${output.entity.primaryKey.name}(), 'Download');
+							}
+						?>
 #else
 						<?php echo ${dollarSign}outputs['${output.id}']->get${entityProperty.name}(); ?>
 #end
@@ -107,7 +111,17 @@
 			</td>
 #end
 #foreach ($property in $outputList.entity.properties)
+#if ($property.type == 'FILE')
+			<td>
+			<?php
+				if (!is_null($${outputList.entity.id}->get${property.name}())) {
+					echo anchor('download/${outputList.entity.id}${property.name}/' . $${outputList.entity.id}->get${outputList.entity.primaryKey.name}(), 'Download');
+				}
+			?>
+			</td>
+#else
 			<td><?php echo $${outputList.entity.id}->get${property.name}(); ?></td>
+#end
 #end
 		</tr>
 		<?php endforeach; ?>
@@ -120,7 +134,11 @@
 
 ### FORMS
 #foreach ($form in $page.forms)
+#if ($form.fileInputs.size() > 0)
+	<?php echo form_open_multipart(uri_string(), array('id'=>'${page.id}-${form.id}', 'class'=>'validate')); ?>
+#else
 	<?php echo form_open(uri_string(), array('id'=>'${page.id}-${form.id}', 'class'=>'validate')); ?>
+#end
 	<?php echo form_hidden('clickframesFormId', '${page.id}-${form.id}'); ?>
 #foreach ($entity in $form.entities)
 	<?php if (isset($outputs['${entity.id}'])) { echo form_hidden('${entity.id}_${entity.primaryKey.id}', $outputs['${entity.id}']->get${entity.primaryKey.name}()); } ?>

@@ -42,6 +42,12 @@ abstract class Abstract${entity.name}DTO {
 #if ($property.persistent && !$property.multiple)
 #if ($property.type.toUpperCase() == "BOOLEAN")
 		$data['${property.id}'] = $this->is${property.name}();
+#elseif ($property.type == 'FILE')
+		$binary = $this->get${property.name}();
+		$data['${property.id}_data'] = $binary->getData();
+		$data['${property.id}_filename'] = $binary->getFilename();
+		$data['${property.id}_mimetype'] = $binary->getMimeType();
+		$data['${property.id}_is_image'] = $binary->isImage();
 #else
 		$data['${property.id}'] = $this->get${property.name}();
 #end

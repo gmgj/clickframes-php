@@ -341,15 +341,19 @@ class FormValidation {
 		{
 			if ( ! is_null($row['postdata']))
 			{
+/*
 				if ($row['is_array'] == FALSE)
 				{
+*/
 					if (isset($_POST[$row['field']]))
 					{
 						$_POST[$row['field']] = $this->prep_for_form($row['postdata']);
 					}
+/*
 				}
 				else
 				{
+
 					// start with a reference
 					$post_ref =& $_POST;
 					
@@ -381,6 +385,7 @@ class FormValidation {
 						$post_ref = $this->prep_for_form($row['postdata']);
 					}
 				}
+*/
 			}
 		}
 	}
