@@ -5,8 +5,15 @@ CREATE TABLE IF NOT EXISTS `$entity.id` (
 #foreach ($property in $entity.simpleProperties)
 #if ($property.foreignEntityId != '')
 	`${property.id}` #mysqlType($property.foreignEntity.primaryKey.type),
-#elseif ($property.persistent)	
+#elseif ($property.persistent)
+#if ($property.type == 'FILE')
+	`${property.id}_path` VARCHAR(255),
+	`${property.id}_filename` VARCHAR(255),
+	`${property.id}_mimetype` VARCHAR(32),
+	`${property.id}_is_image` BOOLEAN,
+#else
 	`${property.id}` #mysqlType($property.type)#if ($property.primaryKey and $property.type == 'INT') AUTO_INCREMENT#end,
+#end
 #end
 #end
 	PRIMARY KEY (`${entity.primaryKey.id}`) 
