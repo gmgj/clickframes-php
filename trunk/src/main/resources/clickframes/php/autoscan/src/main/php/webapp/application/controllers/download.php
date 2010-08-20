@@ -29,17 +29,22 @@ class Download extends ${appspec.name}Controller {
 		// Check that id was provided
 		if (is_null(${dollarSign}${entity.primaryKey.id})) {
 			// replace with HTTP error code
-			show_error('Required ID not provided.');
+			show_error('Required ID not provided.', 400);
 		}
 		
 		// Read entity from database
 		${dollarSign}${entity.id} = $this->${entity.name}_model->read${entity.name}(${dollarSign}${entity.primaryKey.id});
 		if (is_null(${dollarSign}${entity.id})) {
-			show_error('${entity.name} not found for id `'.${dollarSign}${entity.primaryKey.id}.'`.');
+			show_error('${entity.name} not found for id `'.${dollarSign}${entity.primaryKey.id}.'`.', 404);
 		}
 		
-		// Stream property as file
-		force_download('${entity.id}${property.name}' . ${dollarSign}${entity.primaryKey.id}, ${dollarSign}${entity.id}->get${property.name}());
+		// Send file
+		$binary = ${dollarSign}${entity.id}->get${property.name}();
+		if (is_null($binary)) {
+			show_error('BinaryDTO is null in ${entity.name} for id `'.${dollarSign}${entity.primaryKey.id}.'`.', 500);
+		}
+	
+		force_download($binary->getFilename(), file_get_contents($binary->getPath()));
 	}
 #end##foreach property
 #end##foreach entity

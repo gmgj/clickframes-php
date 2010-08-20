@@ -34,7 +34,7 @@ class ${page.name} extends Generated${page.name}Controller {
 	
 	function _load${form.name}() {
 #foreach ($input in $form.inputs)
-#if ($input.entityProperty)		
+#if ($input.entityProperty && $input.entityProperty.type != 'FILE')		
 		$this->formvalidation->set_field(
 				'${input.id}',
 				'${input.title}',
@@ -66,8 +66,14 @@ class ${page.name} extends Generated${page.name}Controller {
     	${dollarSign}${entity.id} = new ${entity.name}DTO();
 #end
 #foreach ($input in $form.inputs)
-#if ($input.entityProperty)	
+#if ($input.entityProperty)
+#if ($input.entityProperty.type == 'FILE')
+		$this->upload->do_upload('${input.id}');
+		log_message('debug', 'UPLOAD DATA: ' . print_r($this->upload->data(), true));
+		${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(BinaryDTO::withData($this->upload->data()));
+#else
         ${dollarSign}${input.entityProperty.entity.id}->set${input.entityProperty.name}(${dollarSign}this->input->post('${input.id}'));
+#end
 #end
 #end
 #end

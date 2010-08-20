@@ -21,6 +21,8 @@
     #foreach($key in $input.allowedValues.keySet())
     <div class="option"><?php echo form_checkbox(array('name'=>'${input.id}', 'id'=>'${input.id}:${key}', 'value'=>'${key}')); ?><?php echo form_label('${input.allowedValues.get($key)}', '${input.id}:${key}'); ?></div>
     #end
+#elseif ($input.type.toUpperCase() == "UPLOAD")
+	<?php echo form_upload(array('name'=>'${input.id}', 'id'=>'${input.id}')); ?>
 #else
 I don't know what to do with ${input.type}.
 #end

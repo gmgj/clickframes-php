@@ -172,6 +172,8 @@ h3 {
 #page-content form .field-checkbox label {
     font-weight:normal;
     line-height:1.1em;
+	padding-left:0.5em;
+	padding-top:0;
 }
 
 #page-content form .actions {

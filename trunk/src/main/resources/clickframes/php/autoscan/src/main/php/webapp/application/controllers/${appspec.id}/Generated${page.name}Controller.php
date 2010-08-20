@@ -64,6 +64,9 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 	 */
 	function Generated${page.name}Controller() {
 		parent::${appspec.name}Controller();
+#if ($page.anyFileInputsOnPage)
+		$this->load->library('upload');
+#end
 	}
 
 	/**

@@ -1,16 +1,23 @@
-#macro (sqliteType $type)#if ($type == 'TEXT')VARCHAR(255)#elseif($type == 'INT')INTEGER#elseif($type == 'FILE')BLOB#else${type}#end#end
+#macro (sqliteType $type)#if ($type == 'TEXT')TEXT#elseif($type == 'INT')INTEGER#elseif($type == 'FILE')BLOB#else${type}#end#end
 
 #foreach ($entity in $appspec.entities)
 CREATE TABLE IF NOT EXISTS `$entity.id` (
 #foreach ($property in $entity.simpleProperties)
 #if ($property.foreignEntityId != '')
 	`${property.id}` #sqliteType($property.foreignEntity.primaryKey.type)
-#elseif ($property.persistent)	
+#elseif ($property.persistent)
+#if ($property.type == 'FILE')
+	`${property.id}_path` TEXT,
+	`${property.id}_filename` TEXT,
+	`${property.id}_mimetype` TEXT,
+	`${property.id}_is_image` BOOLEAN
+#else
 	`${property.id}` #sqliteType($property.type)#if($property.primaryKey) PRIMARY KEY#end#if($property.primaryKey and $property.type == 'INT') AUTOINCREMENT#end
-#end
+#end##if property = file
+#end##if property = persistent
 #if ($velocityCount < $entity.simpleProperties.size()),
-#end
-#end
+#end##foreach property
+#end##foreach entity
 
 );
 

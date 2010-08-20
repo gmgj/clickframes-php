@@ -3,6 +3,9 @@
 
 include_once('Abstract${entity.name}_model.php');
 include_once('dto/${entity.name}DTO.class.php');
+#if ($entity.fileProperties.size() > 0)
+include_once('dto/BinaryDTO.class.php');
+#end
 
 class ${entity.name}_model extends Abstract${entity.name}_model {
     
@@ -91,7 +94,15 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
 #foreach ($property in $entity.properties)
 #if ($property.persistent && !$property.multiple)
         if (!is_null(${dollarSign}${entity.id}->get${property.name}())) {
+#if ($property.type == 'FILE')
+			$binary = ${dollarSign}${entity.id}->get${property.name}();
+			$this->db->set('${property.id}_path', $binary->getPath());
+			$this->db->set('${property.id}_filename', $binary->getFilename());
+			$this->db->set('${property.id}_mimetype', $binary->getMimeType());
+			$this->db->set('${property.id}_is_image', $binary->isImage());
+#else
             $this->db->set('${property.id}', ${dollarSign}${entity.id}->get${property.name}());
+#end
         }
 #end
 #end
@@ -272,7 +283,18 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
         // Populate ${dollarSign}${entity.id} fields
 #foreach ($property in $entity.properties)
 #if ($property.persistent && !$property.multiple)
+#if ($property.type == 'FILE')
+		if (!is_null($row->${property.id}_path)) {
+			$binary = new BinaryDTO();
+			$binary->setPath($row->${property.id}_path);
+			$binary->setFilename($row->${property.id}_filename);
+			$binary->setMimeType($row->${property.id}_mimetype);
+			$binary->setImage($row->${property.id}_is_image);
+			${dollarSign}${entity.id}->set${property.name}($binary);
+		}
+#else
         ${dollarSign}${entity.id}->set${property.name}($row->${property.id});
+#end
 #end
 #end
         return ${dollarSign}${entity.id};
