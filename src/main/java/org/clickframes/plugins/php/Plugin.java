@@ -394,8 +394,6 @@ public class Plugin extends ClickframesPlugin {
     	Action action = (Action) outcomeContext.get("action");
     	Form form = (Form) outcomeContext.get("form");
 
-    	logger.info("Processing context for outcome " + outcome.getId());
-    	
         // only for internal links
         if (outcome.isInternal()) {
             InternalLink internalLink = (InternalLink) outcome;
