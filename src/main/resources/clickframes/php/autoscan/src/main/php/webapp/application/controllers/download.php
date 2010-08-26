@@ -18,7 +18,7 @@ class Download extends ${appspec.name}Controller {
 	 *	Constructor
 	 */
 	function Download() {
-		parent::IssuetrackerController();
+		parent::${appspec.name}Controller();
 		$this->load->helper('download');
 	}
 

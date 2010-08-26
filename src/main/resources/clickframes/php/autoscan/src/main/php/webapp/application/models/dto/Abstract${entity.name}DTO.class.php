@@ -44,10 +44,12 @@ abstract class Abstract${entity.name}DTO {
 		$data['${property.id}'] = $this->is${property.name}();
 #elseif ($property.type == 'FILE')
 		$binary = $this->get${property.name}();
-		$data['${property.id}_data'] = $binary->getData();
-		$data['${property.id}_filename'] = $binary->getFilename();
-		$data['${property.id}_mimetype'] = $binary->getMimeType();
-		$data['${property.id}_is_image'] = $binary->isImage();
+		if (!is_null($binary)) {
+			$data['${property.id}_path'] = $binary->getPath();
+			$data['${property.id}_filename'] = $binary->getFilename();
+			$data['${property.id}_mimetype'] = $binary->getMimeType();
+			$data['${property.id}_is_image'] = $binary->isImage();
+		}
 #else
 		$data['${property.id}'] = $this->get${property.name}();
 #end

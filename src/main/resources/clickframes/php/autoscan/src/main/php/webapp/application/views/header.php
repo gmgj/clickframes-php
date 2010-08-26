@@ -34,7 +34,7 @@
 			<ul id="site-navigation" class="grid_8">
 				<?php if (isset($navigations)) { foreach ($navigations as $navigation) { echo $navigation; } } ?>
             </ul>
-
+#if ($appspec.securityEnabled)
 			<div id="identity" class="grid_4">
 				<?php if ($this->session->userdata('username') !== FALSE) : ?>
 				Logged in as <strong><?php echo $this->session->userdata('username'); ?></strong> &middot; <?php echo anchor('${appspec.loginPage.id}/logout', 'Log out'); ?>
@@ -42,6 +42,7 @@
 				<?php echo anchor('${appspec.loginPage.id}', 'Log in'); ?>
 				<?php endif; ?>
 			</div>
+#end
 			<div class="clear"></div>
 		
 		</div>

@@ -7,6 +7,7 @@ class ${appspec.name}Controller extends Controller {
         parent::Controller();
         $this->load->helper('form');
         $this->load->helper('url');
+		$this->load->helper('html');
         $this->load->library('session');
         $this->load->library('formValidation');
 		$this->load->library('${appspec.id}Email');
@@ -43,7 +44,10 @@ class ${appspec.name}Controller extends Controller {
 	function _uriSegments() {
 		$segs = $this->uri->segment_array();
 		array_shift($segs);
-		return implode('/', $segs);
+		if (!empty($segs)) {
+			return '/' . implode('/', $segs);
+		}
+		return '';
 	}
 
 }

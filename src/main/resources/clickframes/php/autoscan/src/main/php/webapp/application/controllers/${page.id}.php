@@ -153,10 +153,8 @@ class ${page.name} extends Generated${page.name}Controller {
         //$this->${outputList.entity.name}_model->update${outputList.entity.name}($this->_${outputList.id}Selected);
 
 #elseif ($action.type == "DELETE")
-#foreach($entity in $form.entities)
         // Get ID from hidden input
         $this->${outputList.entity.name}_model->delete${outputList.entity.name}($this->_${outputList.id}Selected->get${outputList.entity.primaryKey.name}());
-#end
 #end
 
         // Compute the proper outcome

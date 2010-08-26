@@ -88,6 +88,10 @@ h3 {
     width:30%;
 }
 
+div#page-content .output-list:first-child, div#page-content form:first-child {
+	margin-top:0;
+}
+
 .output-list {
     margin-top:2em;
 }
