@@ -63,9 +63,15 @@
 #elseif ($entityProperty.type == 'FILE')
 						<?php
 							if (!is_null(${dollarSign}outputs['${output.id}']->get${entityProperty.name}())) {
-								echo anchor('download/${output.entity.id}${entityProperty.name}/' . ${dollarSign}outputs['${output.id}']->get${output.entity.primaryKey.name}(), 'Download');
+								if (${dollarSign}outputs['${output.id}']->get${entityProperty.name}()->isImage()) {
+									echo img('download/${output.entity.id}${entityProperty.name}/' . ${dollarSign}outputs['${output.id}']->get${output.entity.primaryKey.name}());
+								} else {
+									echo anchor('download/${output.entity.id}${entityProperty.name}/' . ${dollarSign}outputs['${output.id}']->get${output.entity.primaryKey.name}(), 'Download');
+								}
 							}
 						?>
+#elseif ($entityProperty.type == 'BOOLEAN')
+						<?php echo (${dollarSign}outputs['${output.id}']->get${entityProperty.name}() ? 'True' : 'False'); ?>
 #else
 						<?php echo ${dollarSign}outputs['${output.id}']->get${entityProperty.name}(); ?>
 #end
@@ -106,7 +112,11 @@
 #end
 #end
 #foreach ($action in $outputList.actions)
-				<?php echo anchor('${page.id}/${action.id}/' . $uriSegments . '/' . $${outputList.entity.id}->get${outputList.entity.primaryKey.name}(), '${action.title}'); ?>
+#if ($action.type == "DELETE")
+				<?php echo anchor('${page.id}/${action.id}' . $uriSegments . '/' . $${outputList.entity.id}->get${outputList.entity.primaryKey.name}(), '${action.title}', array('onclick' => 'return confirm(\'Are you sure you want to delete this ${outputList.entity.titleEscaped}?\');')); ?>
+#else
+				<?php echo anchor('${page.id}/${action.id}' . $uriSegments . '/' . $${outputList.entity.id}->get${outputList.entity.primaryKey.name}(), '${action.title}'); ?>
+#end
 #end
 			</td>
 #end
@@ -119,6 +129,8 @@
 				}
 			?>
 			</td>
+#elseif ($property.type == 'BOOLEAN')
+			<td><?php echo ($${outputList.entity.id}->get${property.name}() ? 'True' : 'False'); ?></td>
 #else
 			<td><?php echo $${outputList.entity.id}->get${property.name}(); ?></td>
 #end

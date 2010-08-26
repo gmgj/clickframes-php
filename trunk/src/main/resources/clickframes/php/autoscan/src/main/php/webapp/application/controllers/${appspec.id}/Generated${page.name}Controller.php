@@ -165,7 +165,7 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 #end
 #end
 		$this->_${outputList.id}SelectedId = $${outputList.id}Selected;
-		$this->_${outputList.id}Selected = $this->${outputList.entity.name}_model->get${outputList.name}($params);
+		$this->_${outputList.id}Selected = $this->${outputList.entity.name}_model->read${outputList.entity.name}($this->_${outputList.id}SelectedId);
 		
 		// perform action
 		$this->_performOutcome($this->_process${outputList.name}${action.name}());

@@ -9,6 +9,34 @@
   <name>Clickframes PHP/CodeIgniter Plugin</name>
   <version>1.0-SNAPSHOT</version>
 
+  <distributionManagement>
+    <site>
+      <id>www.clickframes.org</id>
+      <name>Clickframes Website</name>
+      <url>scp://root@www.clickframes.org/home/webadmin/www.clickframes.org/html/docs/plugins/php/${project.version}/plugin/</url>
+    </site>
+
+    <!-- use the following if you're not using a snapshot version. -->
+    <repository>
+      <id>clickframes-releases</id>
+      <name>Clickframes repository</name>
+      <url>dav:http://nexus.clickframes.org/nexus/content/repositories/releases
+      </url>
+    </repository>
+	
+    <!-- use the following if you ARE using a snapshot version. -->
+    <snapshotRepository>
+      <id>clickframes-snapshots</id>
+      <name>Clickframes snapshorts repository</name>
+      <url>dav:http://nexus.clickframes.org/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+  
+  <scm>
+    <connection>scm:svn:http://clickframes-php.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://clickframes-php.googlecode.com/svn/trunk/</developerConnection>
+  </scm>
+
   <repositories>
     <repository>
       <id>clickframes</id>
@@ -65,7 +93,6 @@
     		<excludes>
     			<exclude>**/.svn</exclude>
     		</excludes>
-    		
     	</resource>
     </resources>
   </build>
