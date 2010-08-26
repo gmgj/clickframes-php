@@ -57,7 +57,7 @@
     <dependency>
       <groupId>org.clickframes</groupId>
       <artifactId>clickframes-core</artifactId>
-      <version>0.9.9-SNAPSHOT</version>
+      <version>0.9.9</version>
       <exclusions>
       	<exclusion>
           <groupId>org.apache.velocity</groupId>
