@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
   <groupId>org.clickframes</groupId>
   <name>Clickframes PHP/CodeIgniter Plugin</name>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
 
   <distributionManagement>
     <site>
@@ -32,8 +32,8 @@
   </distributionManagement>
   
   <scm>
-    <connection>scm:svn:http://clickframes-php.googlecode.com/svn/tags/clickframes-php-1.0</connection>
-    <developerConnection>scm:svn:https://clickframes-php.googlecode.com/svn/tags/clickframes-php-1.0</developerConnection>
+    <connection>scm:svn:http://clickframes-php.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://clickframes-php.googlecode.com/svn/trunk/</developerConnection>
   </scm>
 
   <repositories>
