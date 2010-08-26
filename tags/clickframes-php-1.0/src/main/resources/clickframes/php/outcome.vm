@@ -1,0 +1,26 @@
+#set ($key = $outcome.key)
+	function _${outcome.id}Outcome() {
+#if ($outcome.negative)
+		$messageClass = 'failure';
+#else
+		$messageClass = 'success';
+#end
+#if ($outcome.message)
+		$this->session->set_flashdata('message', array('class' => $messageClass, 'text' => $this->lang->line('${appspec.id}_${key}_message')));
+#end
+#foreach ($email in $outcome.emails)
+		$this->_send${email.name}();
+#end
+#if ($outcome.loginSuccessfulOutcome)
+		// Redirect user to secure page he was trying to access, if applicable
+		$referer = $this->session->flashdata('referer');
+		if (!empty($referer)) {
+			redirect($referer);
+		}
+#end
+#if ($outcome.isInternal())
+		redirect('/${outcome.pageRef}'$!{context.get($outcome).queryString});
+#else
+		redirect('${outcome.href}');
+#end
+	}

@@ -1,0 +1,6 @@
+#foreach ($validation in $input.validations)
+#if ($validation.type.toUpperCase() == "REQUIRED")|required#end
+#if ($validation.type.toUppercase() == "EMAIL")|valid_email#end
+#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("min"))|min_length[${validation.argAsString("min")}]#end
+#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("max"))|max_length[${validation.argAsString("max")}]#end
+#end
