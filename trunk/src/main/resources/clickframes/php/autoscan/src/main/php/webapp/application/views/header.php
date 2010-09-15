@@ -31,11 +31,13 @@
     
 			<h1 class="grid_12"><a href="<?php echo base_url(); ?>"><?php echo $applicationTitle; ?></a></h1>
 			<div class="clear"></div>
-			<ul id="site-navigation" class="grid_8">
-				<?php if (isset($navigations)) { foreach ($navigations as $navigation) { echo $navigation; } } ?>
+			<?php if (isset($navigations)) : ?>
+			<ul id="site-navigation" class="grid_6">
+				 <?php foreach ($navigations as $navigation) { echo $navigation; }?>
             </ul>
+			<?php endif; ?>
 #if ($appspec.securityEnabled)
-			<div id="identity" class="grid_4">
+			<div id="identity" class="<?php if (!isset($navigations)) echo 'prefix_6'; ?> grid_6">
 				<?php if ($this->session->userdata('username') !== FALSE) : ?>
 				Logged in as <strong><?php echo $this->session->userdata('username'); ?></strong> &middot; <?php echo anchor('${appspec.loginPage.id}/logout', 'Log out'); ?>
 				<?php else : ?>

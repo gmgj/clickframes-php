@@ -50,7 +50,8 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
             $loggedIn = $this->mapRowTo${entity.name}($row);
 			
             // create session
-			$this->session->set_userdata('username', ${dollarSign}${entity.id}->getLoginUsername());
+			$this->session->set_userdata('userid', $loggedIn->get${entity.primaryKey.name}());
+			$this->session->set_userdata('username', $loggedIn->getLoginUsername());
 			$this->session->set_userdata('last_activity', time());
 			// load additional data into session here if desired
 			return true;
@@ -182,7 +183,7 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
     
 #foreach ($property in $entity.properties)
 #if ($property.multiple)
-#if ($property.foreignEntityId != '')
+#if ($property.foreignEntity)
     /**
      *  Map a ${property.foreignEntity.name} to a ${entity.name}
      *  @param ${entity.primaryKey.type} ${dollarSign}${entity.id}${entity.primaryKey.name} Unique identifier of ${entity.name} object
@@ -209,6 +210,11 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
         return true;
     }
     
+	/**
+	 *	Returns all ${property.name} values for the specified ${entity.name} object.
+	 *	@param ${entity.primaryKey.type} ${dollarSign}${entity.primaryKey.id} Unique identifier of ${entity.name} object
+	 *	@return array An array of ${property.foreignEntity.name}DTO objects, or null if none
+	 */
     function get${entity.name}${property.name}(${dollarSign}${entity.primaryKey.id}) {
         $this->db->select('${property.foreignEntity.id}.*');
         $this->db->from('${entity.id}_${property.id}');
@@ -236,7 +242,7 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
     
 #else
     /**
-     *  Add new ${property} value to ${entity.name}
+     *  Add new ${property.name} value to ${entity.name}
      *  @param ${entity.primaryKey.type} ${dollarSign}${entity.id}${entity.primaryKey.name} Unique identifier of ${entity.name} object
      *  @param ${property.type} ${dollarSign}${property.id} Value to add.
      *  @return int New row ID if insert is successful.
@@ -249,17 +255,21 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
     }
     
     /**
-     *  Unmaps a ${property.foreignEntity.name} from a ${entity.name}.
-     *  Note that you may wish to delete the ${property.foreignEntity.name} afterwards.
+     *  Removes ${property.name} value from ${entity.name} object.
      *  @param ${entity.primaryKey.type} ${dollarSign}${entity.id}${entity.primaryKey.name} Unique identifier of ${entity.name} object
      *  @param ${property.foreignEntity.primaryKey.type} ${dollarSign}${property.foreignEntity.id} Unique identifier of ${property.foreignEntity.name} object to map
      *  @return boolean True if remove successful.
      */
-    function removeFrom${property.name}ById($id) {
+    function removeFrom${property.name}($id) {
         $this->db->delete('${entity.id}_${property.id}', array('id' => $id));
         return true;
     }
     
+	/**
+	 *	Returns all ${property.name} values for the specified ${entity.name} object.
+	 *	@param ${entity.primaryKey.type} ${dollarSign}${entity.primaryKey.id} Unique identifier of ${entity.name} object
+	 *	@return array An array of ${property.type}, or null if none
+	 */
     function get${entity.name}${property.name}(${dollarSign}${entity.primaryKey.id}) {
         $query = $this->db->get_where('${entity.id}_${property.id}', array('${entity.id}_${entity.primaryKey.id}' => ${dollarSign}${entity.primaryKey.id}));
         

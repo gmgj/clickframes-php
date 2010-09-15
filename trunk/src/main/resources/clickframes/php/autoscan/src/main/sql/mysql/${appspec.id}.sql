@@ -3,7 +3,7 @@
 #foreach ($entity in $appspec.entities)
 CREATE TABLE IF NOT EXISTS `$entity.id` (
 #foreach ($property in $entity.simpleProperties)
-#if ($property.foreignEntityId != '')
+#if ($property.foreignEntity)
 	`${property.id}` #mysqlType($property.foreignEntity.primaryKey.type),
 #elseif ($property.persistent)
 #if ($property.type == 'FILE')
@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS `$entity.id` (
 #foreach ($property in $entity.properties)
 #if ($property.multiple)
 CREATE TABLE IF NOT EXISTS `${entity.id}_${property.id}` (
-#if ($property.foreignEntityId == '')
+#if (!$property.foreignEntity)
     `id` INT PRIMARY KEY AUTO_INCREMENT,
 #end
 	`${entity.id}_${entity.primaryKey.id}` #mysqlType($entity.primaryKey.type),
-#if ($property.foreignEntityId != '')
+#if ($property.foreignEntity)
 	`${property.foreignEntity.id}_${property.foreignEntity.primaryKey.id}` #mysqlType($property.foreignEntity.primaryKey.type)
 #else
 	`${property.id}` #mysqlType($property.type)
