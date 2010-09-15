@@ -3,7 +3,7 @@
 #foreach ($entity in $appspec.entities)
 CREATE TABLE IF NOT EXISTS `$entity.id` (
 #foreach ($property in $entity.simpleProperties)
-#if ($property.foreignEntityId != '')
+#if ($property.foreignEntityId)
 	`${property.id}` #sqliteType($property.foreignEntity.primaryKey.type)
 #elseif ($property.persistent)
 #if ($property.type == 'FILE')
@@ -24,11 +24,11 @@ CREATE TABLE IF NOT EXISTS `$entity.id` (
 #foreach ($property in $entity.properties)
 #if ($property.multiple)
 CREATE TABLE IF NOT EXISTS `${entity.id}_${property.id}` (
-#if ($property.foreignEntityId == '')
+#if (!$property.foreignEntityId)
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
 #end
 	`${entity.id}_${entity.primaryKey.id}` #sqliteType($entity.primaryKey.type),
-#if ($property.foreignEntityId != '')
+#if ($property.foreignEntityId)
 	`${property.foreignEntity.id}_${property.foreignEntity.primaryKey.id}` #sqliteType($property.foreignEntity.primaryKey.type)
 #else
 	`${property.id}` #sqliteType($property.type)

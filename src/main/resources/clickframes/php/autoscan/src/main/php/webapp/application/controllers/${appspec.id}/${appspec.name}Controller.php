@@ -22,7 +22,7 @@ class ${appspec.name}Controller extends Controller {
     function _checkSecurity() {
 		if (!$this->sessionAlive()) {
 			$this->session->set_flashdata('referer', uri_string());
-			redirect('/${appspec.getLoginPage.id}');
+			redirect('/${appspec.loginPage.id}');
 		}
     }
     

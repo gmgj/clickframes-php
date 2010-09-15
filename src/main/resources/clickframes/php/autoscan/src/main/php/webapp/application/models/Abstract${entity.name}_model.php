@@ -20,7 +20,7 @@ abstract class Abstract${entity.name}_model extends Model {
     
 #foreach ($property in $entity.properties)
 #if ($property.multiple)
-#if ($property.foreignEntityId != '')
+#if ($property.foreignEntity)
     abstract function addTo${property.name}(${dollarSign}${entity.id}${entity.primaryKey.name}, ${dollarSign}${property.foreignEntity.id}${property.foreignEntity.primaryKey.name});
     abstract function removeFrom${property.name}(${dollarSign}${entity.id}${entity.primaryKey.name}, ${dollarSign}${property.foreignEntity.id}${property.foreignEntity.primaryKey.name});
 #else
