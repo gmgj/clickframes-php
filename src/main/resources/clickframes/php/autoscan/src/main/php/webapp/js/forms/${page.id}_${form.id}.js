@@ -11,28 +11,34 @@ $(document).ready(function(){
 	var messages = {};
 
 #foreach ($validation in $input.validations)
-#if ($validation.type.toUpperCase() == "REQUIRED")
+#if ($validation.type == "required")
 	rules['required']        = true;
 #if ($validation.description != '')
 	messages['required']     = "${validation.description}";
 #end
 #end
-#if ($validation.type.toUppercase() == "EMAIL")
+#if ($validation.type == "email")
 	rules['email']           = true;
 #if ($validation.description != '')
 	messages['email']        = "${validation.description}";
 #end
 #end
-#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("min"))
-	rules['minlength']       = ${validation.argAsString("min")};
+#if ($validation.type == "length" && $validation.hasArg("min"))
+	rules['minlength']       = ${validation.getArgAsString("min")};
 #if ($validation.description != '')
 	messages['minlength']    = "${validation.description}";
 #end
 #end
-#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("max"))
-	rules['maxlength']       = ${validation.argAsString("max")};
+#if ($validation.type == "length" && $validation.hasArg("max"))
+	rules['maxlength']       = ${validation.getArgAsString("max")};
 #if ($validation.description != '')
 	messages['maxlength']    = "${validation.description}";
+#end
+#end
+#if ($validation.type == "matchesInput")
+	rules['equalTo']       = '#${validation.otherInputId}';
+#if ($validation.description != '')
+	messages['equalTo']    = "${validation.description}";
 #end
 #end
 #end

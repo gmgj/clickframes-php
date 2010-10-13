@@ -303,7 +303,12 @@ class ${entity.name}_model extends Abstract${entity.name}_model {
 			${dollarSign}${entity.id}->set${property.name}($binary);
 		}
 #else
+#if ($property.loginPassword)
+		${dollarSign}${entity.id}->set${property.name}Direct($row->${property.id});
+#else
         ${dollarSign}${entity.id}->set${property.name}($row->${property.id});
+#end
+		
 #end
 #end
 #end
