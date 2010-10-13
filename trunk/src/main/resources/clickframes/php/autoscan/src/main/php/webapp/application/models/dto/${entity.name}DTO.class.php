@@ -32,6 +32,13 @@ class ${entity.name}DTO extends Abstract${entity.name}DTO {
 #end
     }
 
+#if ($property.loginPassword)
+	// Sets the password field without the hash
+	function set${property.name}Direct(${dollarSign}${property.id}) {
+		$this->${property.id} = ${dollarSign}${property.id};
+	}
+#end
+
 #end
 #if ($property.multiple)
     function add${property.name}(${dollarSign}${property.id}) {

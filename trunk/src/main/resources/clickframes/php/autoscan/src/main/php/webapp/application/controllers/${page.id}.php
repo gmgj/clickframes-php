@@ -212,10 +212,10 @@ class ${page.name} extends Generated${page.name}Controller {
 #end
 #end
 		
-		$result = $this->${appspec.id}Email->send${email.name}($from, $to#foreach($param in $email.parameters), ${dollarSign}${param.id}#end#foreach($output in $email.outputs), ${dollarSign}${output.id}#end);
+		$result = $this->${appspec.id}email->send${email.name}($from, $to#foreach($param in $email.parameters), ${dollarSign}${param.id}#end#foreach($output in $email.outputs), ${dollarSign}${output.id}#end);
 	
 		if ($result !== TRUE) {
-			show_error("Unable to send email.\n\n" + $result);
+			show_error("Unable to send email.\n\n" . $result);
 		}
 	}
 #end

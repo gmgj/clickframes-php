@@ -210,17 +210,21 @@ class Generated${page.name}Controller extends ${appspec.name}Controller {
 	function _validate${form.name}() {
 #foreach($input in $form.inputs)
 #foreach($validation in $input.validations)
-#if ($validation.type.toUpperCase() == "REQUIRED")
+		// ${validation.type}
+#if ($validation.type == "required")
 		$this->formvalidation->set_rule('${input.id}', 'required', '${validation.description}');
 #end
-#if ($validation.type.toUppercase() == "EMAIL")
+#if ($validation.type == "email")
 		$this->formvalidation->set_rule('${input.id}', 'valid_email', '${validation.description}');
 #end
-#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("min"))
-		$this->formvalidation->set_rule('${input.id}', 'min_length[${validation.argAsString("min")}]', '${validation.description}');
+#if ($validation.type == "length" && $validation.hasArg("min"))
+		$this->formvalidation->set_rule('${input.id}', 'min_length[${validation.getArgAsString("min")}]', '${validation.description}');
 #end
-#if ($validation.type.toUppercase() == "LENGTH" && $validation.hasArg("max"))
-		$this->formvalidation->set_rule('${input.id}', 'max_length[${validation.argAsString("max")}]', '${validation.description}');
+#if ($validation.type == "length" && $validation.hasArg("max"))
+		$this->formvalidation->set_rule('${input.id}', 'max_length[${validation.getArgAsString("max")}]', '${validation.description}');
+#end
+#if ($validation.type == "matchesInput")
+		$this->formvalidation->set_rule('${input.id}', 'matches[${validation.otherInputId}]', '${validation.description}');
 #end
 #### cover other validation types here
 #end

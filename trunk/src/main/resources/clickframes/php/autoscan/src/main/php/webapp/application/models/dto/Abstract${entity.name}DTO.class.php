@@ -51,7 +51,9 @@ abstract class Abstract${entity.name}DTO {
 			$data['${property.id}_is_image'] = $binary->isImage();
 		}
 #else
-		$data['${property.id}'] = $this->get${property.name}();
+		if (!is_null($this->get${property.name}())) {
+			$data['${property.id}'] = $this->get${property.name}();
+		}
 #end
 #end
 #end

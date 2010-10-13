@@ -26,6 +26,8 @@ class ${appspec.name}Email extends Abstract${appspec.name}Email {
 	*/
 	function send${email.name}($from, $to#foreach($param in $email.parameters), ${dollarSign}${param.id} = null#end#foreach($output in $email.outputs), ${dollarSign}${output.id} = null#end) {
 		
+		$CI =& get_instance();
+		
 		$vars = array();
 #foreach($param in $email.parameters)
 		$vars['#{${param.id}}'] = ${dollarSign}${param.id};
@@ -36,7 +38,7 @@ class ${appspec.name}Email extends Abstract${appspec.name}Email {
 #end
 #end
 
-		$this->sendMessage($from, $to, $this->lang->line('email_${email.id}_subject'), $vars, $this->lang->line('email_${email.id}_message'));
+		return $this->sendMessage($from, $to, $CI->lang->line('email_${email.id}_subject'), $vars, $CI->lang->line('email_${email.id}_message'));
 
 	}
 #end
